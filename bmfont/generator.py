@@ -5,6 +5,7 @@ import os
 import sys
 from enum import Enum
 from PIL import Image
+from constant import SPECIAL_CHARACTERS
 
 HELP = r"""
 BMFontGenerator
@@ -32,17 +33,6 @@ python generator.py ./path_to_pictures name_of_output_file
 
 TOP_ALIGNMENT_SYMBOL = set([u"^", u"`", u'"', u"'", u"”", u"“"])
 BOTTOM_ALIGNMENT_SYMBOL = set([u",", u".", u"_", u"…", u"，", u"。"])
-SPECIAL_CHARACTERS = {
-    u"冒号": u":",
-    u"问号": u"?",
-    u"星号": u"*",
-    u"斜杠": u"/",
-    u"反斜杠": u"\\",
-    u"大于": u">",
-    u"小于": u"<",
-    u"竖线": u"|",
-    u"引号": u"\""
-}
 
 
 def show_help():
@@ -241,7 +231,7 @@ class Alignment(Enum):
 
 
 class BMFontGenerator:
-    def __init__(self, where, filename="temp", max_width=256, alignment=Alignment.Center):
+    def __init__(self, where, filename="temp", max_width=1024, alignment=Alignment.Center):
         if not os.path.isdir(where):
             print("无效的图片字路径: %s" % where)
             sys.exit(-1)
@@ -339,11 +329,9 @@ class BMFontGenerator:
                     char.chnl = 15
                     writer.add_char(char.text())
                     x += img.width
-                    print("正在添加字符: %s => %s 位置: %s, %s" %
-                          (code, char.id, x, y))
-                except Exception as err:
+                    print("正在添加字符: %s => %s" % (code, char.id))
+                except Exception:
                     print("无效的字符: %s" % base)
-                    print(err)
         merge.save(self.__filename)
         writer.save(self.__fntname)
         print("BMFont已生成: %s" % self.__fntname)
