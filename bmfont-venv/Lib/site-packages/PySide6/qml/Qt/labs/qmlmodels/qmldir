@@ -1,0 +1,5 @@
+module Qt.labs.qmlmodels
+plugin labsmodelsplugin
+classname QtQmlLabsModelsPlugin
+typeinfo plugins.qmltypes
+
