@@ -4,13 +4,14 @@ import sys
 from PySide6 import QtCore
 from PySide6.QtGui import (
     QStandardItemModel,
-    QStandardItem
+    QStandardItem,
+    QIcon
 )
 from PySide6.QtWidgets import (
     QLabel, QLineEdit, QApplication,
     QWidget, QPushButton, QHBoxLayout,
     QVBoxLayout, QFileDialog, QListView,
-    QProgressBar, QSpacerItem, QSizePolicy
+    QProgressBar
 )
 
 from helper.config import (Config)
@@ -30,6 +31,9 @@ class MainWindow(QWidget):
 
     def __init__(self):
         super().__init__()
+
+        self.setWindowTitle("BMFont Toolbox")
+        self.setWindowIcon(QIcon("../static/icon.svg"))
 
         self.config = Config("bmfont_toolbox_config.json")
         self.config.init("images", get_user_picture())
@@ -115,6 +119,7 @@ class MainWindow(QWidget):
 
 if __name__ == "__main__":
     app = QApplication([])
+    app.addLibraryPath("../static")
     window = MainWindow()
     window.resize(800, 600)
     window.show()
