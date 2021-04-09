@@ -2,6 +2,7 @@ import os
 import sys
 
 from PySide6 import QtCore
+from PySide6.QtCore import QDir
 from PySide6.QtGui import (
     QStandardItemModel,
     QStandardItem,
@@ -145,7 +146,8 @@ class MainWindow(QMainWindow):
         super().__init__()
         global resource
         self.setWindowTitle("BMFont Toolbox")
-        self.setWindowIcon(QIcon(get_resource("icon.svg")))
+        # self.setWindowIcon(QIcon(get_resource("icon.svg")))
+        self.setWindowIcon(QIcon("resources/icon.svg"))
 
         self.menu_help = self.menuBar().addMenu("&帮助")
         action_manual = QAction(QIcon(), "&手册", self)
@@ -177,10 +179,9 @@ if __name__ == "__main__":
     config = Config("bmfont_toolbox_config.json")
     config.init("images", get_user_picture())
     config.init("output", get_user_document())
+    QDir.addSearchPath('resources', '../static/')
 
     app = QApplication([])
-    resource = os.path.abspath(os.path.join(os.path.dirname(__file__), "../static"))
-    app.addLibraryPath(resource)
     window = MainWindow()
     window.resize(800, 600)
     window.show()
