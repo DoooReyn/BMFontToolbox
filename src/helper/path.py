@@ -23,3 +23,12 @@ def get_ext_name(path):
 
 def is_ext_matched(path, ext):
     return get_ext_name(path).lower() == ext.lower()
+
+
+def get_image_files(path):
+    files = []
+    if os.path.isdir(path):
+        for filename in os.listdir(path):
+            if is_ext_matched(filename, ".png"):
+                files.append(filename)
+    return files

@@ -28,5 +28,11 @@ class Config:
     def get(self, key):
         return self.data.get(key)
 
+    def get_default(self, key, value):
+        v = self.get(key)
+        if v is None:
+            return value
+        return v
+
     def set(self, key, value):
         self.data[key] = value
