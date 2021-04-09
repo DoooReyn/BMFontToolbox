@@ -3,10 +3,12 @@
 
 import os
 import sys
+from shutil import rmtree
+
 from PIL import ImageDraw, ImageFont, Image
 from fontTools.ttLib import TTFont
+
 from constant import SPECIAL_SWAP_CHARACTERS
-from shutil import rmtree
 
 
 class BMFontTTF:
@@ -79,5 +81,6 @@ class BMFontTTF:
 
 if __name__ == "__main__":
     chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    bmfont = BMFontTTF(r"E:/Libary/2-Asset/22-Font/JetBrainsMono-Regular.ttf", chars, stroke_color="#666666", stroke_width=2)
+    bmfont = BMFontTTF(r"E:/Libary/2-Asset/22-Font/JetBrainsMono-Regular.ttf", chars, stroke_color="#666666",
+                       stroke_width=2)
     bmfont.save("./output/JetBrainsMono-Regular")
