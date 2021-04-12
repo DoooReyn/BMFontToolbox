@@ -30,6 +30,7 @@ class MainUI(QWidget):
         self.image_list_model = None
         self.start_progress = None
         self.setup_ui()
+        self.refresh_images(self.app.config.get("images"))
 
     def setup_ui(self):
         main_layout = QVBoxLayout()
@@ -62,8 +63,6 @@ class MainUI(QWidget):
 
         image_listview = QListView()
         image_list_model = QStandardItemModel(image_listview)
-        for path in get_image_files(self.app.config.get("images")):
-            image_list_model.appendRow(QStandardItem(path))
         image_listview.setModel(image_list_model)
 
         start_widget = QWidget()
