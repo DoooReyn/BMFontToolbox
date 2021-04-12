@@ -1,8 +1,8 @@
 from PySide6.QtGui import QIcon, QAction
 from PySide6.QtWidgets import QMainWindow
 
-from .mainui import MainUI
-from .manual import Manual
+from src.widgets.mainui import MainUI
+from src.widgets.manual import Manual
 
 
 class MainWindow(QMainWindow):
@@ -10,7 +10,6 @@ class MainWindow(QMainWindow):
     def __init__(self, app):
         super().__init__()
         self.app = app
-
         self.setWindowTitle("BMFont Toolbox")
         self.setWindowIcon(QIcon("resources:icon.svg"))
 
@@ -18,7 +17,7 @@ class MainWindow(QMainWindow):
         view_help_action = self.create_action("resources:notes.svg", "&手册", "F1", self.on_view_manual)
         self.help_menu.addAction(view_help_action)
 
-        self.setCentralWidget(MainUI(app))
+        self.setCentralWidget(MainUI(self.app))
 
     def create_action(self, icon=None, text="", shortcut=None, on_clicked=None):
         action = QAction(QIcon(icon), text, self)

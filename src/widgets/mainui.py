@@ -2,8 +2,17 @@ import os
 
 from PySide6 import QtCore
 from PySide6.QtGui import QStandardItemModel, QStandardItem
-from PySide6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QLabel, QLineEdit, QPushButton, QListView, \
-    QProgressBar, QFileDialog
+from PySide6.QtWidgets import (
+    QLabel,
+    QWidget,
+    QLineEdit,
+    QListView,
+    QPushButton,
+    QHBoxLayout,
+    QVBoxLayout,
+    QFileDialog,
+    QProgressBar,
+)
 
 from src.helper.path import get_image_files
 
@@ -12,54 +21,66 @@ class MainUI(QWidget):
     def __init__(self, app):
         super(MainUI, self).__init__()
         self.app = app
+        self.image_line_edit = None
+        self.output_line_edit = None
+        self.image_listview = None
+        self.start_progress = None
+        self.setup_ui()
 
-        self.main_layout = QVBoxLayout()
-        self.main_layout.setAlignment(QtCore.Qt.AlignTop)
+    def setup_ui(self):
+        main_layout = QVBoxLayout()
+        main_layout.setAlignment(QtCore.Qt.AlignTop)
+        self.setLayout(main_layout)
 
-        self.image_widget = QWidget()
-        self.image_layout = QHBoxLayout()
+        image_widget = QWidget()
+        image_layout = QHBoxLayout()
+        image_widget.setLayout(image_layout)
+
         image_label = QLabel(text='图集目录', alignment=QtCore.Qt.AlignCenter)
-        self.image_line_edit = QLineEdit(app.config.get("images"))
-        self.image_choose_btn = QPushButton(text='选择')
-        self.image_choose_btn.clicked.connect(self.on_image_choose_clicked)
-        self.image_layout.addWidget(image_label)
-        self.image_layout.addWidget(self.image_line_edit)
-        self.image_layout.addWidget(self.image_choose_btn)
-        self.image_widget.setLayout(self.image_layout)
+        image_line_edit = QLineEdit(self.app.config.get("images"))
+        image_choose_btn = QPushButton(text='选择')
+        image_choose_btn.clicked.connect(self.on_image_choose_clicked)
+        image_layout.addWidget(image_label)
+        image_layout.addWidget(image_line_edit)
+        image_layout.addWidget(image_choose_btn)
 
-        self.output_widget = QWidget()
-        self.output_layout = QHBoxLayout()
+        output_widget = QWidget()
+        output_layout = QHBoxLayout()
+        output_widget.setLayout(output_layout)
+
         output_label = QLabel(text='输出目录', alignment=QtCore.Qt.AlignCenter)
-        self.output_line_edit = QLineEdit(app.config.get("output"))
-        self.output_choose_btn = QPushButton(text='选择')
-        self.output_choose_btn.clicked.connect(self.on_output_choose_clicked)
-        self.output_layout.addWidget(output_label)
-        self.output_layout.addWidget(self.output_line_edit)
-        self.output_layout.addWidget(self.output_choose_btn)
-        self.output_widget.setLayout(self.output_layout)
+        output_line_edit = QLineEdit(self.app.config.get("output"))
+        output_choose_btn = QPushButton(text='选择')
+        output_choose_btn.clicked.connect(self.on_output_choose_clicked)
+        output_layout.addWidget(output_label)
+        output_layout.addWidget(output_line_edit)
+        output_layout.addWidget(output_choose_btn)
 
-        self.image_listview = QListView()
-        self.image_list_model = QStandardItemModel(self.image_listview)
-        for path in get_image_files(app.config.get("images")):
-            self.image_list_model.appendRow(QStandardItem(path))
-        self.image_listview.setModel(self.image_list_model)
+        image_listview = QListView()
+        image_list_model = QStandardItemModel(image_listview)
+        for path in get_image_files(self.app.config.get("images")):
+            image_list_model.appendRow(QStandardItem(path))
+        image_listview.setModel(image_list_model)
 
-        self.start_widget = QWidget()
-        self.start_layout = QHBoxLayout()
-        self.start_btn = QPushButton(text="执行")
-        self.start_btn.clicked.connect(self.on_start_clicked)
-        self.start_progress = QProgressBar()
-        self.start_progress.setValue(0)
-        self.start_layout.addWidget(self.start_progress)
-        self.start_layout.addWidget(self.start_btn)
-        self.start_widget.setLayout(self.start_layout)
+        start_widget = QWidget()
+        start_layout = QHBoxLayout()
+        start_btn = QPushButton(text="执行")
+        start_btn.clicked.connect(self.on_start_clicked)
+        start_progress = QProgressBar()
+        start_progress.setValue(0)
+        start_layout.addWidget(start_progress)
+        start_layout.addWidget(start_btn)
+        start_widget.setLayout(start_layout)
 
-        self.main_layout.addWidget(self.image_widget)
-        self.main_layout.addWidget(self.output_widget)
-        self.main_layout.addWidget(self.image_listview)
-        self.main_layout.addWidget(self.start_widget)
+        main_layout.addWidget(image_widget)
+        main_layout.addWidget(output_widget)
+        main_layout.addWidget(image_listview)
+        main_layout.addWidget(start_widget)
 
-        self.setLayout(self.main_layout)
+        self.image_line_edit = image_line_edit
+        self.output_line_edit = output_line_edit
+        self.image_listview = image_listview
+        self.start_progress = start_progress
 
     def refresh_images(self, dirname):
         self.image_list_model.clear()

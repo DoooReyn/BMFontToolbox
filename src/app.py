@@ -3,10 +3,10 @@ import sys
 from PySide6.QtCore import QDir
 from PySide6.QtWidgets import QApplication
 
-from helper.common import (SingletonMeta)
-from helper.config import (Config)
-from helper.path import (get_user_picture, get_user_document)
-from widgets.window import MainWindow
+from src.helper.common import (SingletonMeta)
+from src.helper.config import (Config)
+from src.helper.path import (get_user_picture, get_user_document)
+from src.widgets.window import MainWindow
 
 
 class App(metaclass=SingletonMeta):
