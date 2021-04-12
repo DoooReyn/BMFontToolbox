@@ -67,7 +67,6 @@ class BMFontGenerator:
                 if x + img.width > self.__max_width:
                     x = 0
                 region = (x, y, image.width + x, y + image.height)
-                merge.paste(img, region)
                 base = os.path.splitext(os.path.basename(path))[0]
                 code = base
                 if len(base) > 1:
@@ -97,8 +96,9 @@ class BMFontGenerator:
                     char.chnl = 15
                     writer.add_char(char.text())
                     x += img.width
+                    merge.paste(img, region)
                     print("正在添加字符: %s => %s" % (code, char.id))
-                except RuntimeError:
+                except TypeError:
                     print("无效的字符: %s" % base)
         merge.save(self.__filename)
         writer.save(self.__fntname)
