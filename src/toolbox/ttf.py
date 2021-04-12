@@ -89,4 +89,3 @@ class TTF:
 
     def generate(self):
         pass
-

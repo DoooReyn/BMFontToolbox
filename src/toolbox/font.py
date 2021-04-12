@@ -1,8 +1,8 @@
 from enum import Enum
 
 from src.toolbox.atlas import Atlas
-from src.toolbox.ttf import TTF
 from src.toolbox.otf import OTF
+from src.toolbox.ttf import TTF
 
 
 class FontMode(Enum):

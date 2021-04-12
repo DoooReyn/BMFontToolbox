@@ -147,7 +147,7 @@ class MainUI(QWidget):
             return
 
         FontFactory.run_with(FontMode.Atlas, {
-            "from": self.image_line_edit.text(),
+            "image": self.image_line_edit.text(),
             "output": self.output_line_edit.text(),
             "atlas": self.image_atlas
         })
