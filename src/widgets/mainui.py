@@ -30,7 +30,7 @@ class MainUI(QWidget):
         self.image_list_model = None
         self.start_progress = None
         self.setup_ui()
-        self.refresh_images(self.app.config.get("images"))
+        self.refresh_images()
 
     def setup_ui(self):
         main_layout = QVBoxLayout()
@@ -63,6 +63,7 @@ class MainUI(QWidget):
 
         image_listview = QListView()
         image_list_model = QStandardItemModel(image_listview)
+        image_list_model.itemChanged.connect(self.on_image_changed)
         image_listview.setModel(image_list_model)
 
         start_widget = QWidget()
@@ -87,11 +88,13 @@ class MainUI(QWidget):
         self.image_list_model = image_list_model
         self.start_progress = start_progress
 
-    def refresh_images(self, dirname):
+    def refresh_images(self):
         self.image_list_model.clear()
         self.image_atlas.clear()
+        dirname = self.get_image_dir()
         for path in get_image_files(dirname):
-            self.image_list_model.appendRow(QStandardItem(path))
+            item = QStandardItem(os.path.splitext(path)[0])
+            self.image_list_model.appendRow(item)
             self.image_atlas.append(os.path.join(dirname, path))
 
     def on_image_choose_clicked(self):
@@ -101,7 +104,18 @@ class MainUI(QWidget):
             dirname = os.path.abspath(url)
             self.app.config.set("images", dirname)
             self.image_line_edit.setText(dirname)
-            self.refresh_images(dirname)
+            self.refresh_images()
+
+    def on_image_changed(self, item):
+        row = item.index().row()
+        old = self.image_atlas[row]
+        new = os.path.join(self.get_image_dir(), item.text() + ".png")
+        try:
+            os.renames(old, new)
+            self.image_atlas[row] = new
+        except Exception as e:
+            Message.show_error(str(e), self)
+            item.setText(os.path.splitext(os.path.basename(old))[0])
 
     def on_output_choose_clicked(self):
         where = self.app.config.get("output")
@@ -111,13 +125,19 @@ class MainUI(QWidget):
             self.app.config.set("output", dirname)
             self.output_line_edit.setText(dirname)
 
+    def get_image_dir(self):
+        return self.image_line_edit.text()
+
+    def get_output_dir(self):
+        return self.output_line_edit.text()
+
     def on_start_clicked(self):
-        from_dir = self.image_line_edit.text()
+        from_dir = self.get_image_dir()
         if not (os.path.exists(from_dir) and os.path.isdir(from_dir)):
             Message.show_error("无效的图集目录！", self)
             return
 
-        output_dir = self.output_line_edit.text()
+        output_dir = self.get_output_dir()
         if not (os.path.exists(output_dir) and os.path.isdir(output_dir)):
             Message.show_error("无效的输出目录！", self)
             return
