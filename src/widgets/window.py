@@ -14,13 +14,19 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("BMFont Toolbox")
         self.setWindowIcon(QIcon("resources:icon.svg"))
 
-        self.menu_help = self.menuBar().addMenu("&帮助")
-        action_manual = QAction(QIcon(), "&手册", self)
-        action_manual.setShortcut("F1")
-        action_manual.triggered.connect(self.on_view_manual)
-        self.action_manual = self.menu_help.addAction(action_manual)
+        self.help_menu = self.menuBar().addMenu("&帮助")
+        view_help_action = self.create_action("resources:notes.svg", "&手册", "F1", self.on_view_manual)
+        self.help_menu.addAction(view_help_action)
 
         self.setCentralWidget(MainUI(app))
+
+    def create_action(self, icon=None, text="", shortcut=None, on_clicked=None):
+        action = QAction(QIcon(icon), text, self)
+        if shortcut:
+            action.setShortcut(shortcut)
+        if on_clicked:
+            action.triggered.connect(on_clicked)
+        return action
 
     def closeEvent(self, event):
         self.app.config.set("window_width", self.width())
@@ -31,6 +37,6 @@ class MainWindow(QMainWindow):
     def on_view_manual(self):
         dialog = Manual(self)
         dialog.show()
-        dialog.setFixedSize(320, self.app.config.get("window_height"))
+        dialog.setFixedSize(320, self.height())
         x, y = self.x(), self.y()
         dialog.move(x + self.width(), y)
