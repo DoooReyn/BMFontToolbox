@@ -1,38 +1,26 @@
 from enum import Enum
 
-from PySide6 import QtCore
-from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel
+from PySide6.QtWidgets import QMessageBox
 
 
 class Level(Enum):
-    Info = "Info"
-    Warning = "Warning"
-    Error = "Error"
+    Info = 0
+    Warning = 1
+    Error = 2
+
+
+LEVEL_NAMES = ["提示", "警告", "错误"]
 
 
 class Message:
-    def __init__(self):
-        pass
-
-    @staticmethod
-    def show_dialog(parent, title, tip):
-        dialog = QDialog(parent)
-        dialog.setWindowTitle(title)
-        dialog.setFixedSize(160, 100)
-        layout = QVBoxLayout()
-        layout.setAlignment(QtCore.Qt.AlignCenter)
-        dialog.setLayout(layout)
-        layout.addWidget(QLabel(tip))
-        dialog.show()
-
     @staticmethod
     def show_info(text, parent):
-        Warning.show_dialog(parent, Level.Info, text)
+        QMessageBox.information(parent, LEVEL_NAMES[Level.Info.value], text)
 
     @staticmethod
     def show_warning(text, parent):
-        Warning.show_dialog(parent, Level.Warning, text)
+        QMessageBox.warning(parent, LEVEL_NAMES[Level.Warning.value], text)
 
     @staticmethod
     def show_error(text, parent):
-        Warning.show_dialog(parent, Level.Error, text)
+        QMessageBox.critical(parent, LEVEL_NAMES[Level.Error.value], text)

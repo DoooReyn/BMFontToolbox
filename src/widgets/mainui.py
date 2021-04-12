@@ -70,6 +70,7 @@ class MainUI(QWidget):
         start_layout = QHBoxLayout()
         start_btn = QPushButton(text="执行")
         start_btn.clicked.connect(self.on_start_clicked)
+        start_btn.setShortcut("F5")
         start_progress = QProgressBar()
         start_progress.setValue(0)
         start_layout.addWidget(start_progress)
