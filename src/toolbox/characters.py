@@ -36,3 +36,7 @@ ESCAPE_CHARS = {
 }
 
 ESCAPE_SWAP_CHARS = dict(zip(ESCAPE_CHARS.values(), ESCAPE_CHARS.keys()))
+
+TOP_ALIGNMENT_CHARS = {u"^", u"`", u'"', u"'", u"”", u"“"}
+
+BOTTOM_ALIGNMENT_CHARS = {u",", u".", u"_", u"…", u"，", u"。"}
