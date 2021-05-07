@@ -169,17 +169,9 @@ class MainUI(QWidget):
             Message.show_error("图集目录下未找到有效图集！", self)
             return
 
-        try:
-            max_width = int(self.max_length_edit.text())
-            max_width = min(max_width, max(16, max_width))
-            self.max_length_edit.setText(str(max_width))
-        except ValueError:
-            Message.show_error("最大宽度必须是有效整数", self)
-            return
-
         FontFactory.run_with(FontMode.Atlas, {
             "image": self.image_line_edit.text(),
             "output": self.output_line_edit.text(),
             "atlas": self.image_atlas,
-            "max_width": max_width
+            "max_width": int(self.max_length_edit.text())
         })
