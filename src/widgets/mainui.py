@@ -31,6 +31,7 @@ class MainUI(QWidget):
         self.image_listview = None
         self.image_list_model = None
         self.start_progress = None
+        self.max_length_valid = str(self.app.config.get("max_length"))
         self.setup_ui()
         self.refresh_images()
 
@@ -68,7 +69,7 @@ class MainUI(QWidget):
         param_widget.setLayout(param_layout)
 
         max_length_label = QLabel(text="最大宽度", alignment=QtCore.Qt.AlignLeft)
-        max_length_edit = QLineEdit(str(self.app.config.get("max_length")))
+        max_length_edit = QLineEdit(self.max_length_valid)
         param_layout.addWidget(max_length_label)
         param_layout.addWidget(max_length_edit)
         max_length_edit.textChanged.connect(self.on_max_length_changed)
@@ -141,12 +142,16 @@ class MainUI(QWidget):
             self.output_line_edit.setText(dirname)
 
     def on_max_length_changed(self):
+        max_width = 0
         try:
             max_width = int(self.max_length_edit.text())
-            max_width = min(max_width, max(16, max_width))
-            self.max_length_edit.setText(str(max_width))
+            max_width = max(0, max_width)
         except ValueError:
-            self.max_length_edit.setText(str(1024))
+            pass
+        finally:
+            self.max_length_valid = str(max_width)
+            self.app.config.set("max_length", max_width)
+            self.max_length_edit.setText(self.max_length_valid)
 
     def get_image_dir(self):
         return self.image_line_edit.text()
