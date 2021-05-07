@@ -12,26 +12,25 @@ class Level(Enum):
     Error = 2
 
 
-LEVEL_NAMES = ["提示", "警告", "错误"]
-
-
 class Message:
+    LEVEL_NAMES = ["提示", "警告", "错误"]
+
     @staticmethod
     def show_info(text, parent):
-        QMessageBox.information(parent, LEVEL_NAMES[Level.Info.value], text)
+        QMessageBox.information(parent, Message.LEVEL_NAMES[Level.Info.value], text)
 
     @staticmethod
     def show_warning(text, parent):
-        QMessageBox.warning(parent, LEVEL_NAMES[Level.Warning.value], text)
+        QMessageBox.warning(parent, Message.LEVEL_NAMES[Level.Warning.value], text)
 
     @staticmethod
     def show_error(text, parent):
-        QMessageBox.critical(parent, LEVEL_NAMES[Level.Error.value], text)
+        QMessageBox.critical(parent, Message.LEVEL_NAMES[Level.Error.value], text)
 
     @staticmethod
     def show_file(text):
         box = QMessageBox()
-        box.setWindowTitle(LEVEL_NAMES[Level.Info.value])
+        box.setWindowTitle(Message.LEVEL_NAMES[Level.Info.value])
         box.setText(text)
         box.addButton("打开", QMessageBox.AcceptRole)
         box.addButton("关闭", QMessageBox.RejectRole)
