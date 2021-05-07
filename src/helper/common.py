@@ -29,6 +29,11 @@ class SingletonMeta(type):
         return cls._instances[cls]
 
 
+def call(cb, **kwargs):
+    if cb:
+        cb(**kwargs)
+
+
 # 全局参数
 class GMenu:
     help = "&帮助"

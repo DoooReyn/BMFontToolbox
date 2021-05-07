@@ -5,7 +5,7 @@ from PySide6.QtCore import QUrl
 from PySide6.QtGui import QDesktopServices, QIcon
 from PySide6.QtWidgets import QMessageBox
 
-from src.helper.common import GResource
+from src.helper.common import GResource, call
 
 
 class Level(Enum):
@@ -52,9 +52,6 @@ class Message:
         box.addButton(deny_text, QMessageBox.RejectRole)
         reply = box.exec_()
         if reply == QMessageBox.AcceptRole:
-            if confirm_cb:
-                confirm_cb()
+            call(confirm_cb)
         elif reply == QMessageBox.RejectRole:
-            if deny_cb:
-                deny_cb()
-            box.close()
+            call(deny_cb)
