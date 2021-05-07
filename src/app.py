@@ -18,7 +18,7 @@ class App(metaclass=SingletonMeta):
         App.config.init("output", get_user_document())
         App.config.init("window_width", 640)
         App.config.init("window_height", 480)
-        QDir.addSearchPath('resources', '../static/')
+        QDir.addSearchPath("resources", "../static/")
 
     def run(self, width=640, height=480):
         window = MainWindow(self)

@@ -1,7 +1,7 @@
 import os
 
 from PySide6 import QtCore
-from PySide6.QtGui import QStandardItemModel, QStandardItem
+from PySide6.QtGui import QStandardItemModel, QStandardItem, QKeySequence
 from PySide6.QtWidgets import (
     QLabel,
     QWidget,
@@ -15,6 +15,7 @@ from PySide6.QtWidgets import (
 )
 
 from src.helper.path import get_image_files
+from src.helper.common import g_signal, g_shortcut
 from src.toolbox.font import (FontFactory, FontMode)
 from src.widgets.message import Message
 
@@ -70,12 +71,13 @@ class MainUI(QWidget):
         start_layout = QHBoxLayout()
         start_btn = QPushButton(text="执行")
         start_btn.clicked.connect(self.on_start_clicked)
-        start_btn.setShortcut("F5")
+        start_btn.setShortcut(QKeySequence.StandardKey.Save)
         start_progress = QProgressBar()
         start_progress.setValue(0)
         start_layout.addWidget(start_progress)
         start_layout.addWidget(start_btn)
         start_widget.setLayout(start_layout)
+        g_signal.execute_trigger.connect(self.on_start_clicked)
 
         main_layout.addWidget(image_widget)
         main_layout.addWidget(output_widget)

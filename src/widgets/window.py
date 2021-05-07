@@ -1,6 +1,8 @@
 from PySide6.QtGui import QIcon, QAction
 from PySide6.QtWidgets import QMainWindow
 
+from src.helper.common import g_shortcut, g_menu, g_help, g_resource, g_signal
+from src.toolbox.characters import ESCAPE_SWAP_CHARS
 from src.widgets.mainui import MainUI
 from src.widgets.message import Message
 
@@ -11,11 +13,19 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.app = app
         self.setWindowTitle("BMFont Toolbox")
-        self.setWindowIcon(QIcon("resources:icon.svg"))
+        self.setWindowIcon(QIcon(g_resource.get("icon_window")))
 
-        self.help_menu = self.menuBar().addMenu("&帮助")
-        view_help_action = self.create_action("resources:notes.svg", "&手册", "F1", self.on_view_manual)
-        self.help_menu.addAction(view_help_action)
+        g_signal.msgbox_trigger.connect(self.on_show_msg)
+
+        self.help_menu = self.menuBar().addMenu(g_menu.get("help"))
+        (manual_name, manual_key) = g_shortcut.get("manual")
+        manual_action = self.create_action(g_resource.get("icon_manual"), manual_name, manual_key, self.on_view_manual)
+        self.help_menu.addAction(manual_action)
+
+        self.run_menu = self.menuBar().addMenu(g_menu.get("run"))
+        (execute_name, execute_key) = g_shortcut.get("execute")
+        execute_action = self.create_action(g_resource.get("icon_manual"), execute_name, execute_key, self.on_execute)
+        self.run_menu.addAction(execute_action)
 
         self.setCentralWidget(MainUI(self.app))
 
@@ -34,29 +44,15 @@ class MainWindow(QMainWindow):
         event.accept()
 
     def on_view_manual(self):
-        Message.show_info(HELP, self)
+        tail = ""
+        for key, val in ESCAPE_SWAP_CHARS.items():
+            tail += "\n\t%s\t=>\t%s" % (key, val)
+        Message.show_info(g_help + tail, self)
 
+    def on_show_msg(self, msg):
+        if g_signal.msgbox_trigger and msg:
+            Message.show_info(msg, self)
 
-HELP = r"""
-BMFontGenerator
-
-BMFontGenerator是一款基于Python3和PIL的图片字生成器。
-当前仅支持从图片生成FNT字体，未来将支持TTF。
-
-注意：
-· 使用时，将图片字放在指定目录，并命名为单字符对应的名称；
-· 部分特殊字符无法作为文件名，需要进行替换，如：
-    : -> 冒号
-    ? -> 问号
-    * -> 星号
-    / -> 斜杠
-    \ -> 反斜杠
-    > -> 大于
-    < -> 小于
-    | -> 竖线
-    \ -> 引号
-· 生成的文件保存在当前目录下的output目录。
-
-使用方法：
-python generator.py ./path_to_pictures name_of_output_file
-"""
+    @staticmethod
+    def on_execute():
+        g_signal.execute_trigger.emit()
