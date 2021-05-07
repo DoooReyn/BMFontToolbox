@@ -14,8 +14,8 @@ from PySide6.QtWidgets import (
     QProgressBar
 )
 
-from src.helper.path import get_image_files
 from src.helper.common import g_signal
+from src.helper.path import get_image_files
 from src.toolbox.font import (FontFactory, FontMode)
 from src.widgets.message import Message
 
@@ -27,6 +27,7 @@ class MainUI(QWidget):
         self.image_atlas = []
         self.image_line_edit = None
         self.output_line_edit = None
+        self.max_length_edit = None
         self.image_listview = None
         self.image_list_model = None
         self.start_progress = None
@@ -62,6 +63,16 @@ class MainUI(QWidget):
         output_layout.addWidget(output_line_edit)
         output_layout.addWidget(output_choose_btn)
 
+        param_widget = QWidget()
+        param_layout = QHBoxLayout()
+        param_widget.setLayout(param_layout)
+
+        max_length_label = QLabel(text="最大宽度", alignment=QtCore.Qt.AlignLeft)
+        max_length_edit = QLineEdit(str(self.app.config.get("max_length")))
+        param_layout.addWidget(max_length_label)
+        param_layout.addWidget(max_length_edit)
+        max_length_edit.textChanged.connect(self.on_max_length_changed)
+
         image_listview = QListView()
         image_list_model = QStandardItemModel(image_listview)
         image_list_model.itemChanged.connect(self.on_image_changed)
@@ -81,11 +92,13 @@ class MainUI(QWidget):
 
         main_layout.addWidget(image_widget)
         main_layout.addWidget(output_widget)
+        main_layout.addWidget(param_widget)
         main_layout.addWidget(image_listview)
         main_layout.addWidget(start_widget)
 
         self.image_line_edit = image_line_edit
         self.output_line_edit = output_line_edit
+        self.max_length_edit = max_length_edit
         self.image_listview = image_listview
         self.image_list_model = image_list_model
         self.start_progress = start_progress
@@ -127,6 +140,14 @@ class MainUI(QWidget):
             self.app.config.set("output", dirname)
             self.output_line_edit.setText(dirname)
 
+    def on_max_length_changed(self):
+        try:
+            max_width = int(self.max_length_edit.text())
+            max_width = min(max_width, max(16, max_width))
+            self.max_length_edit.setText(str(max_width))
+        except ValueError:
+            self.max_length_edit.setText(str(1024))
+
     def get_image_dir(self):
         return self.image_line_edit.text()
 
@@ -148,8 +169,17 @@ class MainUI(QWidget):
             Message.show_error("图集目录下未找到有效图集！", self)
             return
 
+        try:
+            max_width = int(self.max_length_edit.text())
+            max_width = min(max_width, max(16, max_width))
+            self.max_length_edit.setText(str(max_width))
+        except ValueError:
+            Message.show_error("最大宽度必须是有效整数", self)
+            return
+
         FontFactory.run_with(FontMode.Atlas, {
             "image": self.image_line_edit.text(),
             "output": self.output_line_edit.text(),
-            "atlas": self.image_atlas
+            "atlas": self.image_atlas,
+            "max_width": max_width
         })

@@ -114,4 +114,5 @@ class Atlas:
         from_dir = self.configuration.get("image")
         output_dir = self.configuration.get("output")
         atlas = self.configuration.get("atlas")
-        BMFontGenerator(from_dir, output_dir, os.path.basename(from_dir), atlas, 1024, Alignment.Bottom)
+        max_width = self.configuration.get("max_width") or 1024
+        BMFontGenerator(from_dir, output_dir, os.path.basename(from_dir), atlas, max_width, Alignment.Bottom)
