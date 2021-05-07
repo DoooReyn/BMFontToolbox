@@ -43,6 +43,7 @@ class GShortcut:
 class GResource:
     icon_window = "resources:icon.svg"
     icon_manual = "resources:notes.svg"
+    icon_help = "resources:help.svg"
 
 
 g_help = r"""
