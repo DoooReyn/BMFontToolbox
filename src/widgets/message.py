@@ -1,8 +1,6 @@
-import os
 from enum import Enum
 
-from PySide6.QtCore import QUrl
-from PySide6.QtGui import QDesktopServices, QIcon
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QMessageBox
 
 from src.helper.common import GResource, call
@@ -28,19 +26,6 @@ class Message:
     @staticmethod
     def show_error(text, parent):
         QMessageBox.critical(parent, Message.LEVEL_NAMES[Level.Error.value], text)
-
-    @staticmethod
-    def show_file(text):
-        def open_file():
-            QDesktopServices.openUrl(QUrl("file:///" + text))
-            QDesktopServices.openUrl(QUrl("file:///" + os.path.dirname(text)))
-
-        Message.show_choice(
-            text + "\n\n转换完成！是否打开？",
-            "打开",
-            "关闭",
-            open_file
-        )
 
     @staticmethod
     def show_choice(text="", confirm_text="确认", deny_text="取消", confirm_cb=None, deny_cb=None):

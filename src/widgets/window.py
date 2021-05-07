@@ -1,4 +1,7 @@
-from PySide6.QtGui import QIcon, QAction
+import os
+
+from PySide6.QtCore import QUrl
+from PySide6.QtGui import QAction, QDesktopServices, QIcon
 from PySide6.QtWidgets import QMainWindow
 
 from src.helper.common import GShortcut, GMenu, g_help, GResource, g_signal
@@ -57,7 +60,16 @@ class MainWindow(QMainWindow):
     @staticmethod
     def on_show_open_file(msg):
         if g_signal.open_file_trigger and msg:
-            Message.show_file(msg)
+            def open_file():
+                QDesktopServices.openUrl(QUrl("file:///" + msg))
+                QDesktopServices.openUrl(QUrl("file:///" + os.path.dirname(msg)))
+
+            Message.show_choice(
+                msg + "\n\n转换完成！是否打开？",
+                "打开",
+                "关闭",
+                open_file
+            )
 
     @staticmethod
     def on_execute():
