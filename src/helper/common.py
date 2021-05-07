@@ -6,6 +6,7 @@ class GSignal(QObject):
     msg_trigger = Signal(str)
     msgbox_trigger = Signal(str)
     execute_trigger = Signal()
+    open_file_trigger = Signal(str)
 
 
 class SingletonMeta(type):
@@ -29,20 +30,20 @@ class SingletonMeta(type):
 
 
 # 全局参数
-g_menu = {
-    "help": "&帮助",
-    "run": "&运行",
-}
+class GMenu:
+    help = "&帮助"
+    run = "&运行"
 
-g_shortcut = {
-    "manual": ["&手册", "F1"],
-    "execute": ["&转换", "F5"]
-}
 
-g_resource = {
-    "icon_window": "resources:icon.svg",
-    "icon_manual": "resources:notes.svg"
-}
+class GShortcut:
+    manual = ["&手册", "F1"]
+    execute = ["&转换", "F5"]
+
+
+class GResource:
+    icon_window = "resources:icon.svg"
+    icon_manual = "resources:notes.svg"
+
 
 g_help = r"""
 BMFontGenerator

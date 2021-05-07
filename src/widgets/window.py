@@ -1,7 +1,7 @@
 from PySide6.QtGui import QIcon, QAction
 from PySide6.QtWidgets import QMainWindow
 
-from src.helper.common import g_shortcut, g_menu, g_help, g_resource, g_signal
+from src.helper.common import GShortcut, GMenu, g_help, GResource, g_signal
 from src.toolbox.characters import ESCAPE_SWAP_CHARS
 from src.widgets.mainui import MainUI
 from src.widgets.message import Message
@@ -13,18 +13,19 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.app = app
         self.setWindowTitle("BMFont Toolbox")
-        self.setWindowIcon(QIcon(g_resource.get("icon_window")))
+        self.setWindowIcon(QIcon(GResource.icon_window))
 
         g_signal.msgbox_trigger.connect(self.on_show_msg)
+        g_signal.open_file_trigger.connect(self.on_show_open_file)
 
-        self.help_menu = self.menuBar().addMenu(g_menu.get("help"))
-        (manual_name, manual_key) = g_shortcut.get("manual")
-        manual_action = self.create_action(g_resource.get("icon_manual"), manual_name, manual_key, self.on_view_manual)
+        self.help_menu = self.menuBar().addMenu(GMenu.help)
+        (manual_name, manual_key) = GShortcut.manual
+        manual_action = self.create_action(GResource.icon_manual, manual_name, manual_key, self.on_view_manual)
         self.help_menu.addAction(manual_action)
 
-        self.run_menu = self.menuBar().addMenu(g_menu.get("run"))
-        (execute_name, execute_key) = g_shortcut.get("execute")
-        execute_action = self.create_action(g_resource.get("icon_manual"), execute_name, execute_key, self.on_execute)
+        self.run_menu = self.menuBar().addMenu(GMenu.run)
+        (execute_name, execute_key) = GShortcut.execute
+        execute_action = self.create_action(GResource.icon_manual, execute_name, execute_key, self.on_execute)
         self.run_menu.addAction(execute_action)
 
         self.setCentralWidget(MainUI(self.app))
@@ -52,6 +53,11 @@ class MainWindow(QMainWindow):
     def on_show_msg(self, msg):
         if g_signal.msgbox_trigger and msg:
             Message.show_info(msg, self)
+
+    @staticmethod
+    def on_show_open_file(msg):
+        if g_signal.open_file_trigger and msg:
+            Message.show_file(msg)
 
     @staticmethod
     def on_execute():

@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (
 )
 
 from src.helper.path import get_image_files
-from src.helper.common import g_signal, g_shortcut
+from src.helper.common import g_signal
 from src.toolbox.font import (FontFactory, FontMode)
 from src.widgets.message import Message
 

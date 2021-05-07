@@ -103,7 +103,7 @@ class BMFontGenerator:
                     print("无效的字符: %s" % base)
         merge.save(self.__filename)
         writer.save(self.__fntname)
-        g_signal.msgbox_trigger.emit("BMFont已生成: %s" % self.__fntname)
+        g_signal.open_file_trigger.emit(self.__filename)
 
 
 class Atlas:
