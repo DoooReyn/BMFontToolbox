@@ -1,20 +1,18 @@
 import os
 
 from PySide6 import QtCore
-from PySide6.QtGui import QStandardItemModel, QStandardItem, QKeySequence
+from PySide6.QtGui import QStandardItemModel, QStandardItem
 from PySide6.QtWidgets import (
     QLabel,
     QWidget,
     QLineEdit,
     QListView,
     QPushButton,
-    QHBoxLayout,
-    QVBoxLayout,
+    QGridLayout,
     QFileDialog,
-    QProgressBar
+    QComboBox
 )
 
-from src.helper.common import g_signal
 from src.helper.path import get_image_files
 from src.toolbox.font import (FontFactory, FontMode)
 from src.widgets.message import Message
@@ -27,7 +25,7 @@ class MainUI(QWidget):
         self.image_atlas = []
         self.image_line_edit = None
         self.output_line_edit = None
-        self.max_length_edit = None
+        self.max_width_combo = None
         self.image_listview = None
         self.image_list_model = None
         self.start_progress = None
@@ -36,73 +34,50 @@ class MainUI(QWidget):
         self.refresh_images()
 
     def setup_ui(self):
-        main_layout = QVBoxLayout()
-        main_layout.setAlignment(QtCore.Qt.AlignTop)
-        self.setLayout(main_layout)
+        main_layout = QGridLayout()
 
-        image_widget = QWidget()
-        image_layout = QHBoxLayout()
-        image_widget.setLayout(image_layout)
-
-        image_label = QLabel(text='图集目录', alignment=QtCore.Qt.AlignCenter)
+        image_label = QLabel(text='图集目录')
         image_line_edit = QLineEdit(self.app.config.get("images"))
-        image_choose_btn = QPushButton(text='选择')
+        image_choose_btn = QPushButton(text='浏览')
         image_choose_btn.clicked.connect(self.on_image_choose_clicked)
-        image_layout.addWidget(image_label)
-        image_layout.addWidget(image_line_edit)
-        image_layout.addWidget(image_choose_btn)
-
-        output_widget = QWidget()
-        output_layout = QHBoxLayout()
-        output_widget.setLayout(output_layout)
-
-        output_label = QLabel(text='输出目录', alignment=QtCore.Qt.AlignCenter)
+        output_label = QLabel(text='输出目录')
         output_line_edit = QLineEdit(self.app.config.get("output"))
-        output_choose_btn = QPushButton(text='选择')
+        output_choose_btn = QPushButton(text='浏览')
         output_choose_btn.clicked.connect(self.on_output_choose_clicked)
-        output_layout.addWidget(output_label)
-        output_layout.addWidget(output_line_edit)
-        output_layout.addWidget(output_choose_btn)
 
-        param_widget = QWidget()
-        param_layout = QHBoxLayout()
-        param_widget.setLayout(param_layout)
-
-        max_length_label = QLabel(text="最大宽度", alignment=QtCore.Qt.AlignLeft)
-        max_length_edit = QLineEdit(self.max_length_valid)
-        param_layout.addWidget(max_length_label)
-        param_layout.addWidget(max_length_edit)
-        max_length_edit.textChanged.connect(self.on_max_length_changed)
+        max_width_label = QLabel(text="最大宽度", alignment=QtCore.Qt.AlignLeft)
+        max_width_combo = QComboBox()
+        max_width_combo.addItems(["128", "256", "512", "1024", "2048", "4096"])
 
         image_listview = QListView()
         image_list_model = QStandardItemModel(image_listview)
         image_list_model.itemChanged.connect(self.on_image_changed)
         image_listview.setModel(image_list_model)
 
-        start_widget = QWidget()
-        start_layout = QHBoxLayout()
         start_btn = QPushButton(text="执行")
         start_btn.clicked.connect(self.on_start_clicked)
-        start_btn.setShortcut(QKeySequence.StandardKey.Save)
-        start_progress = QProgressBar()
-        start_progress.setValue(0)
-        start_layout.addWidget(start_progress)
-        start_layout.addWidget(start_btn)
-        start_widget.setLayout(start_layout)
-        g_signal.execute_trigger.connect(self.on_start_clicked)
 
-        main_layout.addWidget(image_widget)
-        main_layout.addWidget(output_widget)
-        main_layout.addWidget(param_widget)
-        main_layout.addWidget(image_listview)
-        main_layout.addWidget(start_widget)
+        main_layout.addWidget(image_label, 0, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        main_layout.addWidget(image_line_edit, 0, 1, 1, 1)
+        main_layout.addWidget(image_choose_btn, 0, 2, 1, 1, QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        main_layout.addWidget(output_label, 1, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        main_layout.addWidget(output_line_edit, 1, 1, 1, 1)
+        main_layout.addWidget(output_choose_btn, 1, 2, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        main_layout.addWidget(max_width_label, 2, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        main_layout.addWidget(max_width_combo, 2, 1, 1, 2)
+        main_layout.addWidget(image_listview, 3, 0, 1, 3)
+        main_layout.addWidget(start_btn, 4, 0, 1, 3)
+
+        main_layout.setHorizontalSpacing(10)
+        main_layout.setVerticalSpacing(10)
+        main_layout.setAlignment(QtCore.Qt.AlignTop | QtCore.Qt.AlignLeft)
+        self.setLayout(main_layout)
 
         self.image_line_edit = image_line_edit
         self.output_line_edit = output_line_edit
-        self.max_length_edit = max_length_edit
+        self.max_width_combo = max_width_combo
         self.image_listview = image_listview
         self.image_list_model = image_list_model
-        self.start_progress = start_progress
 
     def refresh_images(self):
         self.image_list_model.clear()
@@ -141,18 +116,6 @@ class MainUI(QWidget):
             self.app.config.set("output", dirname)
             self.output_line_edit.setText(dirname)
 
-    def on_max_length_changed(self):
-        max_width = 0
-        try:
-            max_width = int(self.max_length_edit.text())
-            max_width = max(0, max_width)
-        except ValueError:
-            pass
-        finally:
-            self.max_length_valid = str(max_width)
-            self.app.config.set("max_length", max_width)
-            self.max_length_edit.setText(self.max_length_valid)
-
     def get_image_dir(self):
         return self.image_line_edit.text()
 
@@ -178,5 +141,5 @@ class MainUI(QWidget):
             "image": self.image_line_edit.text(),
             "output": self.output_line_edit.text(),
             "atlas": self.image_atlas,
-            "max_width": int(self.max_length_edit.text())
+            "max_width": int(self.max_width_combo.currentText())
         })
