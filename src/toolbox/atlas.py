@@ -4,7 +4,7 @@ from PIL import Image
 
 from src.toolbox.characters import (ESCAPE_CHARS, TOP_ALIGNMENT_CHARS, BOTTOM_ALIGNMENT_CHARS)
 from src.toolbox.definition import (FntChar, FntWriter, Alignment)
-from src.helper.common import g_signal
+from src.helper.common import Globals
 
 
 class BMFontGenerator:
@@ -103,7 +103,7 @@ class BMFontGenerator:
                     print("无效的字符: %s" % base)
         merge.save(self.__filename)
         writer.save(self.__fntname)
-        g_signal.open_file_trigger.emit(self.__filename)
+        Globals.signal.open_file_trigger.emit(self.__filename)
 
 
 class Atlas:

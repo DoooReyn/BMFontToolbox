@@ -4,7 +4,7 @@ from PySide6.QtCore import QUrl
 from PySide6.QtGui import QAction, QDesktopServices, QIcon
 from PySide6.QtWidgets import QMainWindow
 
-from src.helper.common import GShortcut, GMenu, g_help, GResource, g_signal
+from src.helper.common import GShortcut, GMenu, Globals, GResource
 from src.toolbox.characters import ESCAPE_SWAP_CHARS
 from src.widgets.mainui import MainUI
 from src.widgets.message import Message
@@ -18,8 +18,8 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("BMFont Toolbox")
         self.setWindowIcon(QIcon(GResource.icon_window))
 
-        g_signal.msgbox_trigger.connect(self.on_show_msg)
-        g_signal.open_file_trigger.connect(self.on_show_open_file)
+        Globals.signal.msgbox_trigger.connect(self.on_show_msg)
+        Globals.signal.open_file_trigger.connect(self.on_show_open_file)
 
         self.help_menu = self.menuBar().addMenu(GMenu.help)
         (manual_name, manual_key) = GShortcut.manual
@@ -51,15 +51,15 @@ class MainWindow(QMainWindow):
         tail = ""
         for key, val in ESCAPE_SWAP_CHARS.items():
             tail += "\n\t%s\t=>\t%s" % (key, val)
-        Message.show_info(g_help + tail, self)
+        Message.show_info(Globals.help + tail, self)
 
     def on_show_msg(self, msg):
-        if g_signal.msgbox_trigger and msg:
+        if Globals.signal.msgbox_trigger and msg:
             Message.show_info(msg, self)
 
     @staticmethod
     def on_show_open_file(msg):
-        if g_signal.open_file_trigger and msg:
+        if Globals.signal.open_file_trigger and msg:
             def open_file():
                 QDesktopServices.openUrl(QUrl("file:///" + msg))
                 QDesktopServices.openUrl(QUrl("file:///" + os.path.dirname(msg)))
@@ -73,4 +73,4 @@ class MainWindow(QMainWindow):
 
     @staticmethod
     def on_execute():
-        g_signal.execute_trigger.emit()
+        Globals.signal.execute_trigger.emit()

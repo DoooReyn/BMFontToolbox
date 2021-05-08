@@ -72,6 +72,7 @@ class MainUI(QWidget):
 
         main_layout.setHorizontalSpacing(10)
         main_layout.setVerticalSpacing(10)
+        main_layout.setContentsMargins(10, 10, 10, 10)
         main_layout.setAlignment(QtCore.Qt.AlignTop | QtCore.Qt.AlignLeft)
         self.setLayout(main_layout)
 

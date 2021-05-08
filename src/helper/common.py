@@ -29,11 +29,6 @@ class SingletonMeta(type):
         return cls._instances[cls]
 
 
-def call(cb, **kwargs):
-    if cb:
-        cb(**kwargs)
-
-
 # 全局参数
 class GMenu:
     help = "&帮助"
@@ -51,15 +46,22 @@ class GResource:
     icon_help = "resources:help.svg"
 
 
-g_help = r"""
-BMFontGenerator
+class Globals:
+    help = r"""
+    BMFontGenerator
+    
+    BMFontGenerator是一款基于Python3和PIL的图片字生成器。
+    当前仅支持从图片生成FNT字体，未来将支持TTF、OTF等字体文件。
+    
+    注意：
+    · 使用时，将图片字放在指定目录，并命名为单字符对应的名称；
+    · 部分特殊字符无法作为文件名，需要进行替换，规则如下：
+    """
 
-BMFontGenerator是一款基于Python3和PIL的图片字生成器。
-当前仅支持从图片生成FNT字体，未来将支持TTF、OTF等字体文件。
+    signal = GSignal()
 
-注意：
-· 使用时，将图片字放在指定目录，并命名为单字符对应的名称；
-· 部分特殊字符无法作为文件名，需要进行替换，规则如下：
-"""
+    @staticmethod
+    def call(cb, **kwargs):
+        if cb:
+            cb(**kwargs)
 
-g_signal = GSignal()
