@@ -50,6 +50,7 @@ class MainUI(QWidget):
 
         start_btn = QPushButton(text="执行")
         start_btn.clicked.connect(self.on_start_clicked)
+        Globals.signal.execute_trigger.connect(self.on_start_clicked)
 
         main_layout.addWidget(image_label, 0, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
         main_layout.addWidget(image_line_edit, 0, 1, 1, 1)

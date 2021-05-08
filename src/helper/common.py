@@ -71,4 +71,3 @@ class Globals:
     def call(cb, **kwargs):
         if cb:
             cb(**kwargs)
-
