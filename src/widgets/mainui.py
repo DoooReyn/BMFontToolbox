@@ -36,13 +36,13 @@ class MainUI(QWidget):
     def setup_ui(self):
         main_layout = QGridLayout()
 
-        image_label = QLabel(text='图集目录')
+        image_label = QLabel(text="图集目录")
         image_line_edit = QLineEdit(self.app.config.get("images"))
-        image_choose_btn = QPushButton(text='浏览')
+        image_choose_btn = QPushButton(text="浏览")
         image_choose_btn.clicked.connect(self.on_image_choose_clicked)
-        output_label = QLabel(text='输出目录')
+        output_label = QLabel(text="输出目录")
         output_line_edit = QLineEdit(self.app.config.get("output"))
-        output_choose_btn = QPushButton(text='浏览')
+        output_choose_btn = QPushButton(text="浏览")
         output_choose_btn.clicked.connect(self.on_output_choose_clicked)
 
         max_width_label = QLabel(text="最大宽度", alignment=QtCore.Qt.AlignLeft)
