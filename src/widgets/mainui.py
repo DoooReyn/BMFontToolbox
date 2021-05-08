@@ -29,7 +29,7 @@ class MainUI(QWidget):
         self.image_listview = None
         self.image_list_model = None
         self.start_progress = None
-        self.max_length_valid = str(self.app.config.get("max_length"))
+        self.max_width_index = self.app.config.get("max_width_index")
         self.setup_ui()
         self.refresh_images()
 
@@ -48,6 +48,8 @@ class MainUI(QWidget):
         max_width_label = QLabel(text="最大宽度", alignment=QtCore.Qt.AlignLeft)
         max_width_combo = QComboBox()
         max_width_combo.addItems(["128", "256", "512", "1024", "2048", "4096"])
+        max_width_combo.setCurrentIndex(self.max_width_index)
+        max_width_combo.currentIndexChanged.connect(self.on_combo_changed)
 
         image_listview = QListView()
         image_list_model = QStandardItemModel(image_listview)
@@ -115,6 +117,10 @@ class MainUI(QWidget):
             dirname = os.path.abspath(url)
             self.app.config.set("output", dirname)
             self.output_line_edit.setText(dirname)
+
+    def on_combo_changed(self):
+        self.max_width_index = self.max_width_combo.currentIndex()
+        self.app.config.set("max_width_index", self.max_width_index)
 
     def get_image_dir(self):
         return self.image_line_edit.text()
