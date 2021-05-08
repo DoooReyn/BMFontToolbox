@@ -42,8 +42,8 @@ class MainWindow(QMainWindow):
         return action
 
     def closeEvent(self, event):
-        self.app.config.set("window_width", self.width())
-        self.app.config.set("window_height", self.height())
+        self.app.config.set(Globals.UserData.window_width, self.width())
+        self.app.config.set(Globals.UserData.window_height, self.height())
         self.app.config.save()
         event.accept()
 

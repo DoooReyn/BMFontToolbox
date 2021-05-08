@@ -2,9 +2,9 @@ import os
 
 from PIL import Image
 
-from src.toolbox.characters import (ESCAPE_CHARS, TOP_ALIGNMENT_CHARS, BOTTOM_ALIGNMENT_CHARS)
-from src.toolbox.definition import (FntChar, FntWriter, Alignment)
 from src.helper.common import Globals
+from src.toolbox.characters import ESCAPE_CHARS, TOP_ALIGNMENT_CHARS, BOTTOM_ALIGNMENT_CHARS
+from src.toolbox.definition import FntChar, FntWriter, Alignment
 
 
 class BMFontGenerator:

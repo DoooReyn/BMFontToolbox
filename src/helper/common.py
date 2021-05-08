@@ -47,6 +47,13 @@ class GResource:
 
 
 class Globals:
+    class UserData:
+        images_dir = "images_dir"
+        output_dir = "output_dir"
+        window_width = "window_width"
+        window_height = "window_height"
+        max_width_index = "max_width_index"
+
     help = r"""
     BMFontGenerator
     

@@ -2,19 +2,11 @@ import os
 
 from PySide6 import QtCore
 from PySide6.QtGui import QStandardItemModel, QStandardItem
-from PySide6.QtWidgets import (
-    QLabel,
-    QWidget,
-    QLineEdit,
-    QListView,
-    QPushButton,
-    QGridLayout,
-    QFileDialog,
-    QComboBox
-)
+from PySide6.QtWidgets import QLabel, QWidget, QLineEdit, QListView, QPushButton, QGridLayout, QFileDialog, QComboBox
 
+from src.helper.common import Globals
 from src.helper.path import get_image_files
-from src.toolbox.font import (FontFactory, FontMode)
+from src.toolbox.font import FontFactory, FontMode
 from src.widgets.message import Message
 
 
@@ -29,7 +21,7 @@ class MainUI(QWidget):
         self.image_listview = None
         self.image_list_model = None
         self.start_progress = None
-        self.max_width_index = self.app.config.get("max_width_index")
+        self.max_width_index = self.app.config.get(Globals.UserData.max_width_index)
         self.setup_ui()
         self.refresh_images()
 
@@ -37,11 +29,11 @@ class MainUI(QWidget):
         main_layout = QGridLayout()
 
         image_label = QLabel(text="图集目录")
-        image_line_edit = QLineEdit(self.app.config.get("images"))
+        image_line_edit = QLineEdit(self.app.config.get(Globals.UserData.images_dir))
         image_choose_btn = QPushButton(text="浏览")
         image_choose_btn.clicked.connect(self.on_image_choose_clicked)
         output_label = QLabel(text="输出目录")
-        output_line_edit = QLineEdit(self.app.config.get("output"))
+        output_line_edit = QLineEdit(self.app.config.get(Globals.UserData.output_dir))
         output_choose_btn = QPushButton(text="浏览")
         output_choose_btn.clicked.connect(self.on_output_choose_clicked)
 
@@ -92,11 +84,11 @@ class MainUI(QWidget):
             self.image_atlas.append(os.path.join(dirname, path))
 
     def on_image_choose_clicked(self):
-        where = self.app.config.get("images")
+        where = self.app.config.get(Globals.UserData.images_dir)
         url = QFileDialog().getExistingDirectory(dir=where)
         if url is not None and url != "":
             dirname = os.path.abspath(url)
-            self.app.config.set("images", dirname)
+            self.app.config.set(Globals.UserData.images_dir, dirname)
             self.image_line_edit.setText(dirname)
             self.refresh_images()
 
@@ -112,16 +104,16 @@ class MainUI(QWidget):
             item.setText(os.path.splitext(os.path.basename(old))[0])
 
     def on_output_choose_clicked(self):
-        where = self.app.config.get("output")
+        where = self.app.config.get(Globals.UserData.output_dir)
         url = QFileDialog().getExistingDirectory(dir=where)
         if url is not None and url != "":
             dirname = os.path.abspath(url)
-            self.app.config.set("output", dirname)
+            self.app.config.set(Globals.UserData.output_dir, dirname)
             self.output_line_edit.setText(dirname)
 
     def on_combo_changed(self):
         self.max_width_index = self.max_width_combo.currentIndex()
-        self.app.config.set("max_width_index", self.max_width_index)
+        self.app.config.set(Globals.UserData.max_width_index, self.max_width_index)
 
     def get_image_dir(self):
         return self.image_line_edit.text()
