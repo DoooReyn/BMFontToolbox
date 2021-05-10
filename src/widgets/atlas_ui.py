@@ -10,30 +10,33 @@ from src.toolbox.font import FontFactory, FontMode
 from src.widgets.message import Message
 
 
-class MainUI(QWidget):
-    def __init__(self, app):
-        super(MainUI, self).__init__()
-        self.app = app
-        self.image_atlas = []
+class AtlasUI(QWidget):
+
+    def __init__(self):
+        super().__init__()
         self.image_line_edit = None
         self.output_line_edit = None
         self.max_width_combo = None
         self.image_listview = None
         self.image_list_model = None
-        self.start_progress = None
-        self.max_width_index = self.app.config.get(Globals.UserData.max_width_index)
+        self.image_atlas = []
+        self.max_width_index = Globals.config.get(Globals.UserData.max_width_index)
+        self.main_layout = QGridLayout()
+        self.main_layout.setHorizontalSpacing(10)
+        self.main_layout.setVerticalSpacing(10)
+        self.main_layout.setContentsMargins(10, 10, 10, 10)
+        self.main_layout.setAlignment(QtCore.Qt.AlignTop | QtCore.Qt.AlignLeft)
+        self.setLayout(self.main_layout)
         self.setup_ui()
         self.refresh_images()
 
     def setup_ui(self):
-        main_layout = QGridLayout()
-
         image_label = QLabel(text="图集目录")
-        image_line_edit = QLineEdit(self.app.config.get(Globals.UserData.images_dir))
+        image_line_edit = QLineEdit(Globals.config.get(Globals.UserData.images_dir))
         image_choose_btn = QPushButton(text="浏览")
         image_choose_btn.clicked.connect(self.on_image_choose_clicked)
         output_label = QLabel(text="输出目录")
-        output_line_edit = QLineEdit(self.app.config.get(Globals.UserData.output_dir))
+        output_line_edit = QLineEdit(Globals.config.get(Globals.UserData.output_dir))
         output_choose_btn = QPushButton(text="浏览")
         output_choose_btn.clicked.connect(self.on_output_choose_clicked)
 
@@ -52,22 +55,16 @@ class MainUI(QWidget):
         start_btn.clicked.connect(self.on_start_clicked)
         Globals.signal.execute_trigger.connect(self.on_start_clicked)
 
-        main_layout.addWidget(image_label, 0, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
-        main_layout.addWidget(image_line_edit, 0, 1, 1, 1)
-        main_layout.addWidget(image_choose_btn, 0, 2, 1, 1, QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        main_layout.addWidget(output_label, 1, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
-        main_layout.addWidget(output_line_edit, 1, 1, 1, 1)
-        main_layout.addWidget(output_choose_btn, 1, 2, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
-        main_layout.addWidget(max_width_label, 2, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
-        main_layout.addWidget(max_width_combo, 2, 1, 1, 2)
-        main_layout.addWidget(image_listview, 3, 0, 1, 3)
-        main_layout.addWidget(start_btn, 4, 0, 1, 3)
-
-        main_layout.setHorizontalSpacing(10)
-        main_layout.setVerticalSpacing(10)
-        main_layout.setContentsMargins(10, 10, 10, 10)
-        main_layout.setAlignment(QtCore.Qt.AlignTop | QtCore.Qt.AlignLeft)
-        self.setLayout(main_layout)
+        self.main_layout.addWidget(image_label, 0, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        self.main_layout.addWidget(image_line_edit, 0, 1, 1, 1)
+        self.main_layout.addWidget(image_choose_btn, 0, 2, 1, 1, QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self.main_layout.addWidget(output_label, 1, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        self.main_layout.addWidget(output_line_edit, 1, 1, 1, 1)
+        self.main_layout.addWidget(output_choose_btn, 1, 2, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        self.main_layout.addWidget(max_width_label, 2, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        self.main_layout.addWidget(max_width_combo, 2, 1, 1, 2)
+        self.main_layout.addWidget(image_listview, 3, 0, 1, 3)
+        self.main_layout.addWidget(start_btn, 4, 0, 1, 3)
 
         self.image_line_edit = image_line_edit
         self.output_line_edit = output_line_edit
@@ -85,11 +82,11 @@ class MainUI(QWidget):
             self.image_atlas.append(os.path.join(dirname, path))
 
     def on_image_choose_clicked(self):
-        where = self.app.config.get(Globals.UserData.images_dir)
+        where = Globals.config.get(Globals.UserData.images_dir)
         url = QFileDialog().getExistingDirectory(dir=where)
         if url is not None and url != "":
             dirname = os.path.abspath(url)
-            self.app.config.set(Globals.UserData.images_dir, dirname)
+            Globals.config.set(Globals.UserData.images_dir, dirname)
             self.image_line_edit.setText(dirname)
             self.refresh_images()
 
@@ -105,16 +102,16 @@ class MainUI(QWidget):
             item.setText(os.path.splitext(os.path.basename(old))[0])
 
     def on_output_choose_clicked(self):
-        where = self.app.config.get(Globals.UserData.output_dir)
+        where = Globals.config.get(Globals.UserData.output_dir)
         url = QFileDialog().getExistingDirectory(dir=where)
         if url is not None and url != "":
             dirname = os.path.abspath(url)
-            self.app.config.set(Globals.UserData.output_dir, dirname)
+            Globals.config.set(Globals.UserData.output_dir, dirname)
             self.output_line_edit.setText(dirname)
 
     def on_combo_changed(self):
         self.max_width_index = self.max_width_combo.currentIndex()
-        self.app.config.set(Globals.UserData.max_width_index, self.max_width_index)
+        Globals.config.set(Globals.UserData.max_width_index, self.max_width_index)
 
     def get_image_dir(self):
         return self.image_line_edit.text()

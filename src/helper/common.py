@@ -1,4 +1,11 @@
 from PySide6.QtCore import QObject, Signal
+from PySide6.QtWidgets import QLayout
+
+
+def clear_widgets(layout: QLayout = None):
+    if layout is not None:
+        for i in range(layout.count()):
+            layout.itemAt(i).widget().deleteLater()
 
 
 class GSignal(QObject):
@@ -7,6 +14,7 @@ class GSignal(QObject):
     msgbox_trigger = Signal(str)
     execute_trigger = Signal()
     open_file_trigger = Signal(str)
+    mode_trigger = Signal(str)
 
 
 class SingletonMeta(type):
@@ -38,6 +46,8 @@ class GMenu:
 class GShortcut:
     manual = ["&手册", "F1"]
     execute = ["&转换", "F5"]
+    mode_1 = ["&图集模式", "F11"]
+    mode_2 = ["&字体模式", "F12"]
 
 
 class GResource:
@@ -64,6 +74,10 @@ class Globals:
     · 使用时，将图片字放在指定目录，并命名为单字符对应的名称；
     · 部分特殊字符无法作为文件名，需要进行替换，规则如下：
     """
+
+    app = None
+    main_window = None
+    config = None
 
     signal = GSignal()
 

@@ -1,76 +1,96 @@
 import os
 
 from PySide6.QtCore import QUrl
-from PySide6.QtGui import QAction, QDesktopServices, QIcon
-from PySide6.QtWidgets import QMainWindow
+from PySide6.QtGui import QDesktopServices, QIcon, QAction
+from PySide6.QtWidgets import QMainWindow, QMenu
 
-from src.helper.common import GShortcut, GMenu, Globals, GResource
+from src.helper.common import GShortcut, GMenu, GResource, Globals
 from src.toolbox.characters import ESCAPE_SWAP_CHARS
-from src.widgets.mainui import MainUI
+from src.widgets.atlas_ui import AtlasUI
+from src.widgets.font_ui import FontUI
 from src.widgets.message import Message
 
 
 class MainWindow(QMainWindow):
 
-    def __init__(self, app):
+    def __init__(self):
         super().__init__()
-        self.app = app
         self.setWindowTitle("BMFont Toolbox")
         self.setWindowIcon(QIcon(GResource.icon_window))
+        self.init_signal()
+        self.init_menu()
 
+    def init_signal(self):
         Globals.signal.msgbox_trigger.connect(self.on_show_msg)
         Globals.signal.open_file_trigger.connect(self.on_show_open_file)
+        Globals.signal.mode_trigger.connect(self.on_change_mode)
 
-        self.help_menu = self.menuBar().addMenu(GMenu.help)
-        (manual_name, manual_key) = GShortcut.manual
-        manual_action = self.create_action(GResource.icon_manual, manual_name, manual_key, self.on_view_manual)
-        self.help_menu.addAction(manual_action)
+    def init_menu(self):
+        self.add_menu(GMenu.help, [
+            (GResource.icon_manual, GShortcut.manual[0], GShortcut.manual[1], self.on_view_manual)
+        ])
 
-        self.run_menu = self.menuBar().addMenu(GMenu.run)
-        (execute_name, execute_key) = GShortcut.execute
-        execute_action = self.create_action(GResource.icon_manual, execute_name, execute_key, self.on_execute)
-        self.run_menu.addAction(execute_action)
+    def add_menu(self, title, actions):
+        menu = QMenu()
+        menu.setTitle(title)
+        for item in actions:
+            icon, name, key, callback = item
+            action = QAction(QIcon(icon), name, self)
+            if key:
+                action.setShortcut(key)
+            if callback:
+                action.triggered.connect(callback)
+            menu.addAction(action)
+        self.menuBar().addMenu(menu)
 
-        self.setCentralWidget(MainUI(self.app))
+    def open(self):
+        self.on_change_mode("mode_1")
 
-    def create_action(self, icon=None, text="", shortcut=None, on_clicked=None):
-        action = QAction(QIcon(icon), text, self)
-        if shortcut:
-            action.setShortcut(shortcut)
-        if on_clicked:
-            action.triggered.connect(on_clicked)
-        return action
+    def on_change_mode(self, mode):
+        if mode == "mode_1":
+            self.setCentralWidget(AtlasUI())
+        elif mode == "mode_2":
+            self.setCentralWidget(FontUI())
 
     def closeEvent(self, event):
-        self.app.config.set(Globals.UserData.window_width, self.width())
-        self.app.config.set(Globals.UserData.window_height, self.height())
-        self.app.config.save()
+        Globals.config.set(Globals.UserData.window_width, self.width())
+        Globals.config.set(Globals.UserData.window_height, self.height())
+        Globals.config.save()
         event.accept()
 
-    def on_view_manual(self):
+    @staticmethod
+    def on_view_manual():
         tail = ""
         for key, val in ESCAPE_SWAP_CHARS.items():
             tail += "\n\t%s\t=>\t%s" % (key, val)
-        Message.show_info(Globals.help + tail, self)
+        Message.show_info(Globals.help + tail, Globals.main_window)
 
     def on_show_msg(self, msg):
         if Globals.signal.msgbox_trigger and msg:
             Message.show_info(msg, self)
 
     @staticmethod
+    def open_file(msg):
+        QDesktopServices.openUrl(QUrl("file:///" + msg))
+        QDesktopServices.openUrl(QUrl("file:///" + os.path.dirname(msg)))
+
+    @staticmethod
     def on_show_open_file(msg):
         if Globals.signal.open_file_trigger and msg:
-            def open_file():
-                QDesktopServices.openUrl(QUrl("file:///" + msg))
-                QDesktopServices.openUrl(QUrl("file:///" + os.path.dirname(msg)))
+            def callback():
+                MainWindow.open_file(msg)
 
             Message.show_choice(
                 msg + "\n\n转换完成！是否打开？",
                 "打开",
                 "关闭",
-                open_file
+                callback
             )
 
     @staticmethod
-    def on_execute():
-        Globals.signal.execute_trigger.emit()
+    def on_mode_1():
+        Globals.signal.mode_trigger.emit("mode_1")
+
+    @staticmethod
+    def on_mode_2():
+        Globals.signal.mode_trigger.emit("mode_2")
