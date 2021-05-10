@@ -2,7 +2,7 @@ import os
 
 from PySide6 import QtCore
 from PySide6.QtGui import QStandardItemModel, QStandardItem
-from PySide6.QtWidgets import QLabel, QWidget, QLineEdit, QListView, QPushButton, QGridLayout, QFileDialog, QComboBox
+from PySide6.QtWidgets import QLabel, QWidget, QLineEdit, QListView, QPushButton, QGridLayout, QFileDialog, QComboBox, QRadioButton, QButtonGroup
 
 from src.helper.common import Globals
 from src.helper.path import get_image_files
@@ -31,6 +31,12 @@ class AtlasUI(QWidget):
         self.refresh_images()
 
     def setup_ui(self):
+        atlas_radio = QRadioButton("图集模式")
+        font_radio = QRadioButton("字体模式")
+        # radio_group = QButtonGroup()
+        # radio_group.addButton(atlas_radio)
+        # radio_group.addButton(font_radio)
+
         image_label = QLabel(text="图集目录")
         image_line_edit = QLineEdit(Globals.config.get(Globals.UserData.images_dir))
         image_choose_btn = QPushButton(text="浏览")
@@ -55,16 +61,18 @@ class AtlasUI(QWidget):
         start_btn.clicked.connect(self.on_start_clicked)
         Globals.signal.execute_trigger.connect(self.on_start_clicked)
 
-        self.main_layout.addWidget(image_label, 0, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
-        self.main_layout.addWidget(image_line_edit, 0, 1, 1, 1)
-        self.main_layout.addWidget(image_choose_btn, 0, 2, 1, 1, QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        self.main_layout.addWidget(output_label, 1, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
-        self.main_layout.addWidget(output_line_edit, 1, 1, 1, 1)
-        self.main_layout.addWidget(output_choose_btn, 1, 2, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
-        self.main_layout.addWidget(max_width_label, 2, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
-        self.main_layout.addWidget(max_width_combo, 2, 1, 1, 2)
-        self.main_layout.addWidget(image_listview, 3, 0, 1, 3)
-        self.main_layout.addWidget(start_btn, 4, 0, 1, 3)
+        self.main_layout.addWidget(atlas_radio, 0, 0, 1, 1)
+        self.main_layout.addWidget(font_radio, 0, 1, 1, 1)
+        self.main_layout.addWidget(image_label, 1, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        self.main_layout.addWidget(image_line_edit, 1, 1, 1, 1)
+        self.main_layout.addWidget(image_choose_btn, 1, 2, 1, 1, QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self.main_layout.addWidget(output_label, 2, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        self.main_layout.addWidget(output_line_edit, 2, 1, 1, 1)
+        self.main_layout.addWidget(output_choose_btn, 2, 2, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        self.main_layout.addWidget(max_width_label, 3, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        self.main_layout.addWidget(max_width_combo, 3, 1, 1, 2)
+        self.main_layout.addWidget(image_listview, 4, 0, 1, 3)
+        self.main_layout.addWidget(start_btn, 5, 0, 1, 3)
 
         self.image_line_edit = image_line_edit
         self.output_line_edit = output_line_edit
