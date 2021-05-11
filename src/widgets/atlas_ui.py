@@ -19,6 +19,7 @@ class AtlasUI(QWidget):
         self.max_width_combo = None
         self.image_listview = None
         self.image_list_model = None
+        self.radio_group = None
         self.image_atlas = []
         self.max_width_index = Globals.config.get(Globals.UserData.max_width_index)
         self.main_layout = QGridLayout()
@@ -33,9 +34,15 @@ class AtlasUI(QWidget):
     def setup_ui(self):
         atlas_radio = QRadioButton("图集模式")
         font_radio = QRadioButton("字体模式")
-        # radio_group = QButtonGroup()
-        # radio_group.addButton(atlas_radio)
-        # radio_group.addButton(font_radio)
+        atlas_radio.setChecked(True)
+        atlas_radio.setCheckable(True)
+        font_radio.setChecked(False)
+        font_radio.setCheckable(True)
+        radio_group = QButtonGroup(self)
+        radio_group.addButton(atlas_radio, 0)
+        radio_group.addButton(font_radio, 1)
+        radio_group.setExclusive(True)
+        radio_group.buttonToggled.connect(self.on_radio_toggled)
 
         image_label = QLabel(text="图集目录")
         image_line_edit = QLineEdit(Globals.config.get(Globals.UserData.images_dir))
@@ -79,6 +86,7 @@ class AtlasUI(QWidget):
         self.max_width_combo = max_width_combo
         self.image_listview = image_listview
         self.image_list_model = image_list_model
+        self.radio_group = radio_group
 
     def refresh_images(self):
         self.image_list_model.clear()
@@ -88,6 +96,12 @@ class AtlasUI(QWidget):
             item = QStandardItem(os.path.splitext(path)[0])
             self.image_list_model.appendRow(item)
             self.image_atlas.append(os.path.join(dirname, path))
+
+    def on_radio_toggled(self, btn, state):
+        if state:
+            mode = "mode_%d" % (self.radio_group.checkedId() + 1)
+            print(mode)
+            Globals.signal.mode_trigger.emit(mode)
 
     def on_image_choose_clicked(self):
         where = Globals.config.get(Globals.UserData.images_dir)

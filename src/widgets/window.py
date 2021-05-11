@@ -47,6 +47,7 @@ class MainWindow(QMainWindow):
         self.on_change_mode("mode_1")
 
     def on_change_mode(self, mode):
+        print("on_change_mode", mode)
         if mode == "mode_1":
             self.setCentralWidget(AtlasUI())
         elif mode == "mode_2":
