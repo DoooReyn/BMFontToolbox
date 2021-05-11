@@ -99,9 +99,7 @@ class AtlasUI(QWidget):
 
     def on_radio_toggled(self, btn, state):
         if state:
-            mode = "mode_%d" % (self.radio_group.checkedId() + 1)
-            print(mode)
-            Globals.signal.mode_trigger.emit(mode)
+            Globals.signal.mode_trigger.emit(self.radio_group.checkedId())
 
     def on_image_choose_clicked(self):
         where = Globals.config.get(Globals.UserData.images_dir)

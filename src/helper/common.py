@@ -1,5 +1,6 @@
 from PySide6.QtCore import QObject, Signal
 from PySide6.QtWidgets import QLayout
+from enum import Enum
 
 
 def clear_widgets(layout: QLayout = None):
@@ -14,7 +15,7 @@ class GSignal(QObject):
     msgbox_trigger = Signal(str)
     execute_trigger = Signal()
     open_file_trigger = Signal(str)
-    mode_trigger = Signal(str)
+    mode_trigger = Signal(int)
 
 
 class SingletonMeta(type):
@@ -80,6 +81,10 @@ class Globals:
     config = None
 
     signal = GSignal()
+
+    class Mode(Enum):
+        atlas = 0
+        font = 1
 
     @staticmethod
     def call(cb, **kwargs):
