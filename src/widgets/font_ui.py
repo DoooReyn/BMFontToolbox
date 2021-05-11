@@ -1,3 +1,5 @@
+import os
+
 from PySide6 import QtCore
 from PySide6.QtGui import QFont, QFontDatabase
 from PySide6.QtWidgets import QLabel, QWidget, QGridLayout, QComboBox, QRadioButton, QButtonGroup, QSpinBox, \
@@ -79,6 +81,7 @@ class FontUI(QWidget):
         size_label = QLabel(text="字体大小")
         size_spin = QSpinBox()
         size_spin.setRange(10, 64)
+        size_spin.setValue(Globals.config.get(Globals.UserData.font_size))
         size_spin.valueChanged.connect(self.refresh_font)
 
         input_label = QLabel("输入字符")
@@ -128,15 +131,17 @@ class FontUI(QWidget):
         self.input_edit.setPlainText("".join(set(self.input_edit.toPlainText())))
 
     def on_custom_clicked(self):
-        where = Globals.config.get(Globals.UserData.output_dir)
+        where = Globals.config.get(Globals.UserData.custom_dir)
         url, types = QFileDialog().getOpenFileName(dir=where, filter="Font Files Only (*.ttf *.otf)")
         if url is not None and url != "":
             QFontDatabase.addApplicationFont(url)
             names = get_font_name(url)
             self.custom_family = names[0][0]
             self.custom_edit.setText(self.custom_family)
+            Globals.config.set(Globals.UserData.custom_dir, os.path.abspath(os.path.dirname(url)))
             self.refresh_font()
         else:
+            self.custom_edit.setText("")
             self.custom_family = None
 
     def refresh_font(self):
@@ -153,3 +158,4 @@ class FontUI(QWidget):
                 font = QFont(self.custom_family)
                 font.setPointSize(self.size_spin.value())
                 self.input_edit.setFont(font)
+        Globals.config.set(Globals.UserData.font_size, self.size_spin.value())

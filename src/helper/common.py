@@ -61,9 +61,11 @@ class Globals:
     class UserData:
         images_dir = "images_dir"
         output_dir = "output_dir"
+        custom_dir = "custom_dir"
         window_width = "window_width"
         window_height = "window_height"
         max_width_index = "max_width_index"
+        font_size = "font_size"
 
     help = r"""
     BMFontGenerator

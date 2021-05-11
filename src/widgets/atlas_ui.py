@@ -122,7 +122,7 @@ class AtlasUI(QWidget):
             item.setText(os.path.splitext(os.path.basename(old))[0])
 
     def on_output_choose_clicked(self):
-        where = Globals.config.get(Globals.UserData.output_dir)
+        where = Globals.config.get(Globals.UserData.custom_dir)
         url = QFileDialog().getExistingDirectory(dir=where)
         if url is not None and url != "":
             dirname = os.path.abspath(url)

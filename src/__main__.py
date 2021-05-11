@@ -13,6 +13,8 @@ if __name__ == "__main__":
     Globals.config = Config("bmfont_toolbox_config.json")
     Globals.config.init(Globals.UserData.images_dir, get_user_picture())
     Globals.config.init(Globals.UserData.output_dir, get_user_document())
+    Globals.config.init(Globals.UserData.custom_dir, get_user_document())
+    Globals.config.init(Globals.UserData.font_size, 10)
     Globals.config.init(Globals.UserData.window_width, 640)
     Globals.config.init(Globals.UserData.window_height, 480)
     Globals.config.init(Globals.UserData.max_width_index, 1)
