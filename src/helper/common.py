@@ -40,15 +40,16 @@ class SingletonMeta(type):
 
 # 全局参数
 class GMenu:
-    help = "&帮助"
-    run = "&运行"
+    help = "&Help"
+    run = "&Run"
+    mode = "&Mode"
 
 
 class GShortcut:
     manual = ["&手册", "F1"]
     execute = ["&转换", "F5"]
-    mode_1 = ["&图集模式", "F11"]
-    mode_2 = ["&字体模式", "F12"]
+    mode_1 = ["&图集模式", "Ctrl+1"]
+    mode_2 = ["&字体模式", "Ctrl+2"]
 
 
 class GResource:

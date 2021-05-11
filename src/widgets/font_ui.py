@@ -25,7 +25,6 @@ class FontUI(QWidget):
         super().__init__()
 
         self.system_fonts = get_system_fonts()
-        self.radio_group = None
         self.size_spin = None
         self.font_combo = None
         self.input_edit = None
@@ -41,18 +40,6 @@ class FontUI(QWidget):
         self.setup_ui()
 
     def setup_ui(self):
-        atlas_radio = QRadioButton("图集模式")
-        font_radio = QRadioButton("字体模式")
-        atlas_radio.setChecked(False)
-        atlas_radio.setCheckable(True)
-        font_radio.setChecked(True)
-        font_radio.setCheckable(True)
-        radio_group = QButtonGroup(self)
-        radio_group.addButton(atlas_radio, 0)
-        radio_group.addButton(font_radio, 1)
-        radio_group.setExclusive(True)
-        radio_group.buttonToggled.connect(self.on_radio_toggled)
-
         sys_radio = QRadioButton("系统字体")
         sys_radio.setChecked(True)
         font_combo = QComboBox()
@@ -92,8 +79,6 @@ class FontUI(QWidget):
         Globals.signal.execute_trigger.connect(self.on_start_clicked)
 
         self.main_layout.setColumnStretch(1, 1)
-        self.main_layout.addWidget(atlas_radio, 0, 0, 1, 1)
-        self.main_layout.addWidget(font_radio, 0, 1, 1, 1)
         self.main_layout.addWidget(sys_radio, 1, 0, 1, 1)
         self.main_layout.addWidget(font_combo, 1, 1, 1, 1)
         self.main_layout.addWidget(custom_radio, 2, 0, 1, 1)
@@ -106,7 +91,6 @@ class FontUI(QWidget):
         self.main_layout.addWidget(input_edit, 5, 0, 1, 3)
         self.main_layout.addWidget(start_btn, 6, 0, 1, 3)
 
-        self.radio_group = radio_group
         self.size_spin = size_spin
         self.input_edit = input_edit
         self.font_combo = font_combo
@@ -114,10 +98,6 @@ class FontUI(QWidget):
         self.custom_edit = custom_edit
 
         self.refresh_font()
-
-    def on_radio_toggled(self, btn: QRadioButton, state):
-        if state:
-            Globals.signal.mode_trigger.emit(self.radio_group.checkedId())
 
     def on_custom_radio_toggled(self, state):
         self.custom_btn.setEnabled(state)

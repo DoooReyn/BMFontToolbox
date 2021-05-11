@@ -19,7 +19,6 @@ class AtlasUI(QWidget):
         self.max_width_combo = None
         self.image_listview = None
         self.image_list_model = None
-        self.radio_group = None
         self.image_atlas = []
         self.max_width_index = Globals.config.get(Globals.UserData.max_width_index)
         self.main_layout = QGridLayout()
@@ -32,18 +31,6 @@ class AtlasUI(QWidget):
         self.refresh_images()
 
     def setup_ui(self):
-        atlas_radio = QRadioButton("图集模式")
-        font_radio = QRadioButton("字体模式")
-        atlas_radio.setChecked(True)
-        atlas_radio.setCheckable(True)
-        font_radio.setChecked(False)
-        font_radio.setCheckable(True)
-        radio_group = QButtonGroup(self)
-        radio_group.addButton(atlas_radio, 0)
-        radio_group.addButton(font_radio, 1)
-        radio_group.setExclusive(True)
-        radio_group.buttonToggled.connect(self.on_radio_toggled)
-
         image_label = QLabel(text="图集目录")
         image_line_edit = QLineEdit(Globals.config.get(Globals.UserData.images_dir))
         image_choose_btn = QPushButton(text="浏览")
@@ -68,8 +55,6 @@ class AtlasUI(QWidget):
         start_btn.clicked.connect(self.on_start_clicked)
         Globals.signal.execute_trigger.connect(self.on_start_clicked)
 
-        self.main_layout.addWidget(atlas_radio, 0, 0, 1, 1)
-        self.main_layout.addWidget(font_radio, 0, 1, 1, 1)
         self.main_layout.addWidget(image_label, 1, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
         self.main_layout.addWidget(image_line_edit, 1, 1, 1, 1)
         self.main_layout.addWidget(image_choose_btn, 1, 2, 1, 1, QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
@@ -86,7 +71,6 @@ class AtlasUI(QWidget):
         self.max_width_combo = max_width_combo
         self.image_listview = image_listview
         self.image_list_model = image_list_model
-        self.radio_group = radio_group
 
     def refresh_images(self):
         self.image_list_model.clear()

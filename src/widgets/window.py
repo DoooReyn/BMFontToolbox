@@ -15,6 +15,7 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.current_mode = Globals.Mode.atlas.value
         self.setWindowTitle("BMFont Toolbox")
         self.setWindowIcon(QIcon(GResource.icon_window))
         self.init_signal()
@@ -28,6 +29,10 @@ class MainWindow(QMainWindow):
     def init_menu(self):
         self.add_menu(GMenu.help, [
             (GResource.icon_manual, GShortcut.manual[0], GShortcut.manual[1], self.on_view_manual)
+        ])
+        self.add_menu(GMenu.mode, [
+            (None, GShortcut.mode_1[0], GShortcut.mode_1[1], self.on_change_to_mode_1),
+            (None, GShortcut.mode_2[0], GShortcut.mode_2[1], self.on_change_to_mode_2)
         ])
 
     def add_menu(self, title, actions):
@@ -44,7 +49,17 @@ class MainWindow(QMainWindow):
         self.menuBar().addMenu(menu)
 
     def open(self):
-        self.on_change_mode(Globals.Mode.atlas.value)
+        self.on_change_mode(self.current_mode)
+
+    def on_change_to_mode_1(self):
+        if self.current_mode != Globals.Mode.atlas.value:
+            self.current_mode = Globals.Mode.atlas.value
+            self.on_change_mode(self.current_mode)
+
+    def on_change_to_mode_2(self):
+        if self.current_mode != Globals.Mode.font.value:
+            self.current_mode = Globals.Mode.font.value
+            self.on_change_mode(self.current_mode)
 
     def on_change_mode(self, mode):
         widget = None
