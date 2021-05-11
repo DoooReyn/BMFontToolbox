@@ -2,7 +2,7 @@ import os
 
 from PySide6 import QtCore
 from PySide6.QtGui import QStandardItemModel, QStandardItem
-from PySide6.QtWidgets import QLabel, QWidget, QLineEdit, QListView, QPushButton, QGridLayout, QFileDialog, QComboBox, QRadioButton, QButtonGroup
+from PySide6.QtWidgets import QLabel, QWidget, QLineEdit, QListView, QPushButton, QGridLayout, QFileDialog, QComboBox
 
 from src.helper.common import Globals
 from src.helper.path import get_image_files
@@ -80,10 +80,6 @@ class AtlasUI(QWidget):
             item = QStandardItem(os.path.splitext(path)[0])
             self.image_list_model.appendRow(item)
             self.image_atlas.append(os.path.join(dirname, path))
-
-    def on_radio_toggled(self, btn, state):
-        if state:
-            Globals.signal.mode_trigger.emit(self.radio_group.checkedId())
 
     def on_image_choose_clicked(self):
         where = Globals.config.get(Globals.UserData.images_dir)
