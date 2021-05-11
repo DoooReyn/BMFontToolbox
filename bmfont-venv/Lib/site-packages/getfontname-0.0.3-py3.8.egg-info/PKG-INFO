@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: getfontname
+Version: 0.0.3
+Summary: get font name from the ttf/ttc font file.
+Home-page: https://github.com/mu2019/getfontname/
+Author: Chen MuSheng
+Author-email: sheng.2179@gmail.com
+License: MIT
+Description: UNKNOWN
+Platform: any

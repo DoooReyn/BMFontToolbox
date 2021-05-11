@@ -19,9 +19,6 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon(GResource.icon_window))
         self.init_signal()
         self.init_menu()
-        self.atlas_ui = AtlasUI()
-        self.font_ui = FontUI()
-        self.ui_list = [self.atlas_ui, self.font_ui]
 
     def init_signal(self):
         Globals.signal.msgbox_trigger.connect(self.on_show_msg)
@@ -50,7 +47,13 @@ class MainWindow(QMainWindow):
         self.on_change_mode(Globals.Mode.atlas.value)
 
     def on_change_mode(self, mode):
-        self.setCentralWidget(self.ui_list[mode])
+        widget = None
+        if mode == Globals.Mode.atlas.value:
+            widget = AtlasUI()
+        elif mode == Globals.Mode.font.value:
+            widget = FontUI()
+        if widget:
+            self.setCentralWidget(widget)
 
     def closeEvent(self, event):
         Globals.config.set(Globals.UserData.window_width, self.width())
@@ -86,11 +89,3 @@ class MainWindow(QMainWindow):
                 "关闭",
                 callback
             )
-
-    @staticmethod
-    def on_mode_1():
-        Globals.signal.mode_trigger.emit("mode_1")
-
-    @staticmethod
-    def on_mode_2():
-        Globals.signal.mode_trigger.emit("mode_2")

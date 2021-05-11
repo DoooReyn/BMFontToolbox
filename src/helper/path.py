@@ -1,4 +1,7 @@
 import os
+import sys
+
+from getfontname import get_font_name
 
 
 def get_temp_path():
@@ -32,3 +35,22 @@ def get_image_files(path):
             if is_ext_matched(filename, ".png"):
                 files.append(filename)
     return files
+
+
+def get_system_fonts():
+    root = None
+    fonts = []
+    if sys.platform == "win32":
+        root = "C:/Windows/Fonts"
+    if root:
+        for item in os.listdir(root):
+            if item.lower().endswith(".ttf") | item.lower().endswith(".otf"):
+                where = os.path.join(root, item)
+                names = get_font_name(where)
+                family = names[0][0]
+                mode = str(names[1][0])
+                if mode.lower().find("italic") == -1:
+                    name = "%s %s" % (family, mode)
+                    font = (where, name, family, mode)
+                    fonts.append(font)
+    return fonts

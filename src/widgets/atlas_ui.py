@@ -64,7 +64,7 @@ class AtlasUI(QWidget):
         image_list_model.itemChanged.connect(self.on_image_changed)
         image_listview.setModel(image_list_model)
 
-        start_btn = QPushButton(text="执行")
+        start_btn = QPushButton(text="导出")
         start_btn.clicked.connect(self.on_start_clicked)
         Globals.signal.execute_trigger.connect(self.on_start_clicked)
 
