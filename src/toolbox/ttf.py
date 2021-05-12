@@ -84,8 +84,8 @@
 
 
 class TTF:
-    def __init__(self, configuration):
-        pass
+    def __init__(self, configuration: dict):
+        self.configuration = configuration
 
     def generate(self):
         pass

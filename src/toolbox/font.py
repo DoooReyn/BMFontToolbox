@@ -14,7 +14,7 @@ class FontMode(Enum):
 class FontFactory:
     @staticmethod
     def run_with(mode=FontMode.Atlas, configuration=None):
-        print(configuration)
+        print(mode, configuration)
         if mode == FontMode.Atlas:
             Atlas(configuration).generate()
         elif mode == FontMode.Ttf:

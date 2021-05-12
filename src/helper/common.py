@@ -1,6 +1,7 @@
+from enum import Enum
+
 from PySide6.QtCore import QObject, Signal
 from PySide6.QtWidgets import QLayout
-from enum import Enum
 
 
 def clear_widgets(layout: QLayout = None):
@@ -13,7 +14,7 @@ class GSignal(QObject):
     err_trigger = Signal(str)
     msg_trigger = Signal(str)
     msgbox_trigger = Signal(str)
-    execute_trigger = Signal()
+    export_trigger = Signal()
     open_file_trigger = Signal(str)
     mode_trigger = Signal(int)
 
@@ -40,16 +41,20 @@ class SingletonMeta(type):
 
 # 全局参数
 class GMenu:
-    help = "&Help"
-    run = "&Run"
-    mode = "&Mode"
+    help = "文件"
+    mode = "模式"
+    # run = "运行"
+    # preference = "首选项"
 
 
 class GShortcut:
-    manual = ["&手册", "F1"]
-    execute = ["&转换", "F5"]
-    mode_1 = ["&图集模式", "Ctrl+1"]
-    mode_2 = ["&字体模式", "Ctrl+2"]
+    manual = ["手册", "F1"]
+    about = ["关于", "F2"]
+    about_qt = ["关于Qt", "F3"]
+    export = ["导出", "Ctrl+E"]
+    mode_1 = ["配置模式", "Ctrl+1"]
+    mode_2 = ["图集模式", "Ctrl+2"]
+    mode_3 = ["字体模式", "Ctrl+3"]
 
 
 class GResource:
@@ -60,6 +65,7 @@ class GResource:
 
 class Globals:
     class UserData:
+        """用户数据存储项key值"""
         images_dir = "images_dir"
         output_dir = "output_dir"
         custom_dir = "custom_dir"
@@ -68,6 +74,13 @@ class Globals:
         max_width_index = "max_width_index"
         font_size = "font_size"
 
+    class Mode(Enum):
+        """模式枚举（主要页面）"""
+        setting = 0
+        atlas = 1
+        font = 2
+
+    # 帮助文案
     help = r"""
     BMFontGenerator
     
@@ -79,17 +92,28 @@ class Globals:
     · 部分特殊字符无法作为文件名，需要进行替换，规则如下：
     """
 
+    # 最大宽度可选值
+    max_width_arr = ["128", "256", "512", "1024", "2048", "4096"]
+
+    # 全局应用变量存点
     app = None
+
+    # 全局主窗口存点
     main_window = None
+
+    # 全局配置存点
     config = None
 
+    # 全局新号存点
     signal = GSignal()
 
-    class Mode(Enum):
-        atlas = 0
-        font = 1
+    @staticmethod
+    def get_max_width():
+        """获取最大宽度值"""
+        return int(Globals.max_width_arr[Globals.config.get(Globals.UserData.max_width_index)])
 
     @staticmethod
     def call(cb, **kwargs):
+        """调用方法"""
         if cb:
             cb(**kwargs)

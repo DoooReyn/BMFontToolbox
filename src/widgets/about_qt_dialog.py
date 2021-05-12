@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QDialog
 
 
-class PreferenceDialog(QDialog):
+class AboutQtDialog(QDialog):
     def __init__(self):
         super().__init__()
         self.setup_ui()

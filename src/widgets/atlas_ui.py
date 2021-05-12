@@ -2,75 +2,48 @@ import os
 
 from PySide6 import QtCore
 from PySide6.QtGui import QStandardItemModel, QStandardItem
-from PySide6.QtWidgets import QLabel, QWidget, QLineEdit, QListView, QPushButton, QGridLayout, QFileDialog, QComboBox
+from PySide6.QtWidgets import QLabel, QLineEdit, QListView, QPushButton, QFileDialog
 
 from src.helper.common import Globals
 from src.helper.path import get_image_files
 from src.toolbox.font import FontFactory, FontMode
 from src.widgets.message import Message
+from src.widgets.ui_base import BaseUI
 
 
-class AtlasUI(QWidget):
+class AtlasUI(BaseUI):
 
     def __init__(self):
-        super().__init__()
         self.image_line_edit = None
-        self.output_line_edit = None
-        self.max_width_combo = None
         self.image_listview = None
         self.image_list_model = None
         self.image_atlas = []
-        self.max_width_index = Globals.config.get(Globals.UserData.max_width_index)
-        self.main_layout = QGridLayout()
-        self.main_layout.setHorizontalSpacing(10)
-        self.main_layout.setVerticalSpacing(10)
-        self.main_layout.setContentsMargins(10, 10, 10, 10)
-        self.main_layout.setAlignment(QtCore.Qt.AlignTop | QtCore.Qt.AlignLeft)
-        self.setLayout(self.main_layout)
-        self.setup_ui()
-        self.refresh_images()
+        Globals.signal.export_trigger.connect(self.on_start_clicked)
+        super(AtlasUI, self).__init__()
 
     def setup_ui(self):
+        super(AtlasUI, self).setup_ui()
+
         image_label = QLabel(text="图集目录")
         image_line_edit = QLineEdit(Globals.config.get(Globals.UserData.images_dir))
         image_choose_btn = QPushButton(text="浏览")
         image_choose_btn.clicked.connect(self.on_image_choose_clicked)
-        output_label = QLabel(text="输出目录")
-        output_line_edit = QLineEdit(Globals.config.get(Globals.UserData.output_dir))
-        output_choose_btn = QPushButton(text="浏览")
-        output_choose_btn.clicked.connect(self.on_output_choose_clicked)
-
-        max_width_label = QLabel(text="最大宽度", alignment=QtCore.Qt.AlignLeft)
-        max_width_combo = QComboBox()
-        max_width_combo.addItems(["128", "256", "512", "1024", "2048", "4096"])
-        max_width_combo.setCurrentIndex(self.max_width_index)
-        max_width_combo.currentIndexChanged.connect(self.on_combo_changed)
 
         image_listview = QListView()
         image_list_model = QStandardItemModel(image_listview)
         image_list_model.itemChanged.connect(self.on_image_changed)
         image_listview.setModel(image_list_model)
 
-        start_btn = QPushButton(text="导出")
-        start_btn.clicked.connect(self.on_start_clicked)
-        Globals.signal.execute_trigger.connect(self.on_start_clicked)
-
         self.main_layout.addWidget(image_label, 1, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
         self.main_layout.addWidget(image_line_edit, 1, 1, 1, 1)
         self.main_layout.addWidget(image_choose_btn, 1, 2, 1, 1, QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        self.main_layout.addWidget(output_label, 2, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
-        self.main_layout.addWidget(output_line_edit, 2, 1, 1, 1)
-        self.main_layout.addWidget(output_choose_btn, 2, 2, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
-        self.main_layout.addWidget(max_width_label, 3, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
-        self.main_layout.addWidget(max_width_combo, 3, 1, 1, 2)
-        self.main_layout.addWidget(image_listview, 4, 0, 1, 3)
-        self.main_layout.addWidget(start_btn, 5, 0, 1, 3)
+        self.main_layout.addWidget(image_listview, 2, 0, 1, 3)
 
         self.image_line_edit = image_line_edit
-        self.output_line_edit = output_line_edit
-        self.max_width_combo = max_width_combo
         self.image_listview = image_listview
         self.image_list_model = image_list_model
+
+        self.refresh_images()
 
     def refresh_images(self):
         self.image_list_model.clear()
@@ -101,23 +74,8 @@ class AtlasUI(QWidget):
             Message.show_error(str(e), self)
             item.setText(os.path.splitext(os.path.basename(old))[0])
 
-    def on_output_choose_clicked(self):
-        where = Globals.config.get(Globals.UserData.custom_dir)
-        url = QFileDialog().getExistingDirectory(dir=where)
-        if url is not None and url != "":
-            dirname = os.path.abspath(url)
-            Globals.config.set(Globals.UserData.output_dir, dirname)
-            self.output_line_edit.setText(dirname)
-
-    def on_combo_changed(self):
-        self.max_width_index = self.max_width_combo.currentIndex()
-        Globals.config.set(Globals.UserData.max_width_index, self.max_width_index)
-
     def get_image_dir(self):
         return self.image_line_edit.text()
-
-    def get_output_dir(self):
-        return self.output_line_edit.text()
 
     def on_start_clicked(self):
         from_dir = self.get_image_dir()
@@ -125,7 +83,7 @@ class AtlasUI(QWidget):
             Message.show_error("无效的图集目录！", self)
             return
 
-        output_dir = self.get_output_dir()
+        output_dir = Globals.config.get(Globals.UserData.output_dir)
         if not (os.path.exists(output_dir) and os.path.isdir(output_dir)):
             Message.show_error("无效的输出目录！", self)
             return
@@ -136,7 +94,7 @@ class AtlasUI(QWidget):
 
         FontFactory.run_with(FontMode.Atlas, {
             "image": self.image_line_edit.text(),
-            "output": self.output_line_edit.text(),
+            "output": output_dir,
             "atlas": self.image_atlas,
-            "max_width": int(self.max_width_combo.currentText())
+            "max_width": Globals.get_max_width()
         })
