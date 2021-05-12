@@ -131,7 +131,8 @@ class FontUI(BaseUI):
             "where": where,
             "output": output_dir,
             "max_width": Globals.get_max_width(),
-            "chars": chars
+            "chars": chars,
+            "font_size": Globals.config.get(Globals.UserData.font_size)
         })
 
     def on_filter_input_text(self):

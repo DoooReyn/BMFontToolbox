@@ -8,6 +8,8 @@ ESCAPE_CHARS = {
     u"less": u"<",  # 小于号
     u"vertical": u"|",  # 竖线
     u"quote": u"\"",  # 双引号
+    u"space": u"\u0020",  # 空格
+    u"dot": u".",  # 点
     u"aa": u"A",
     u"bb": u"B",
     u"cc": u"C",

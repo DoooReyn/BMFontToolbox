@@ -34,13 +34,14 @@ class SettingUI(BaseUI):
         output_choose_btn = QPushButton(text="浏览")
         output_choose_btn.clicked.connect(self.on_output_choose_clicked)
 
-        self.main_layout.setColumnStretch(1, 1)
-        self.main_layout.addWidget(max_width_label, 0, 0, 1, 1)
-        self.main_layout.addWidget(max_width_combo, 0, 1, 1, 1)
+        self.main_layout.setColumnStretch(1, 2)
+        self.main_layout.addWidget(max_width_label, 0, 0, 1, 2)
+        self.main_layout.addWidget(max_width_combo, 0, 1, 1, 2)
         self.main_layout.addWidget(size_label, 1, 0, 1, 1)
-        self.main_layout.addWidget(size_spin, 1, 1, 1, 1)
+        self.main_layout.addWidget(size_spin, 1, 1, 1, 2)
         self.main_layout.addWidget(output_label, 2, 0, 1, 1, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
         self.main_layout.addWidget(output_line_edit, 2, 1, 1, 1)
+        self.main_layout.addWidget(output_choose_btn, 2, 2, 1, 1)
 
         self.max_width_combo = max_width_combo
         self.size_spin = size_spin
@@ -54,7 +55,7 @@ class SettingUI(BaseUI):
         Globals.config.set(Globals.UserData.font_size, self.size_spin.value())
 
     def on_output_choose_clicked(self):
-        where = Globals.config.get(Globals.UserData.custom_dir)
+        where = Globals.config.get(Globals.UserData.output_dir)
         url = QFileDialog().getExistingDirectory(dir=where)
         if url is not None and url != "":
             dirname = os.path.abspath(url)
