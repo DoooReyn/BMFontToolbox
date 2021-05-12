@@ -69,6 +69,7 @@ class Globals:
         images_dir = "images_dir"
         output_dir = "output_dir"
         custom_dir = "custom_dir"
+        import_text_dir = "import_text_dir"
         window_width = "window_width"
         window_height = "window_height"
         max_width_index = "max_width_index"

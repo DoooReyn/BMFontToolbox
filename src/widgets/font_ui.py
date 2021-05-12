@@ -95,9 +95,10 @@ class FontUI(BaseUI):
         self.refresh_font()
 
     def on_import_btn_clicked(self):
-        where = Globals.config.get(Globals.UserData.custom_dir)
+        where = Globals.config.get(Globals.UserData.import_text_dir)
         url, types = QFileDialog().getOpenFileName(dir=where, filter="Text Files Only (*.txt)")
         if url is not None and url != "":
+            Globals.config.set(Globals.UserData.import_text_dir, os.path.abspath(os.path.dirname(url)))
             with open(url, "rt", encoding="utf8") as f:
                 self.input_edit.setPlainText(f.read())
 
