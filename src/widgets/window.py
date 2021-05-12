@@ -1,10 +1,10 @@
 import os
 
-from PySide6.QtCore import QUrl
-from PySide6.QtGui import QDesktopServices, QIcon, QAction
+from PySide6.QtGui import QIcon, QAction
 from PySide6.QtWidgets import QMainWindow, QMenu
 
 from src.helper.common import GShortcut, GMenu, GResource, Globals
+from src.helper.path import clean_app_cache_dir, get_app_cache_dir, open_file_url
 from src.toolbox.characters import ESCAPE_SWAP_CHARS
 from src.widgets.atlas_ui import AtlasUI
 from src.widgets.font_ui import FontUI
@@ -28,16 +28,20 @@ class MainWindow(QMainWindow):
         Globals.signal.mode_trigger.connect(self.on_change_mode)
 
     def init_menu(self):
-        self.add_menu(GMenu.help, [
+        self.add_menu(GMenu.file, [
             (None, GShortcut.export[0], GShortcut.export[1], self.on_export),
-            (GResource.icon_manual, GShortcut.manual[0], GShortcut.manual[1], self.on_view_manual),
-            (None, GShortcut.about[0], GShortcut.about[1], self.on_view_about),
-            (None, GShortcut.about_qt[0], GShortcut.about_qt[1], self.on_view_about_qt)
+            (None, GShortcut.open_app_dir[0], GShortcut.open_app_dir[1], self.on_open_app_dir),
+            (None, GShortcut.clean[0], GShortcut.clean[1], self.on_clean_app_dir)
         ])
         self.add_menu(GMenu.mode, [
             (None, GShortcut.mode_1[0], GShortcut.mode_1[1], self.on_change_to_mode_1),
             (None, GShortcut.mode_2[0], GShortcut.mode_2[1], self.on_change_to_mode_2),
             (None, GShortcut.mode_3[0], GShortcut.mode_3[1], self.on_change_to_mode_3)
+        ])
+        self.add_menu(GMenu.help, [
+            (None, GShortcut.manual[0], GShortcut.manual[1], self.on_view_manual),
+            (None, GShortcut.about[0], GShortcut.about[1], self.on_view_about),
+            (None, GShortcut.about_qt[0], GShortcut.about_qt[1], self.on_view_about_qt)
         ])
 
     def add_menu(self, title, actions):
@@ -105,14 +109,22 @@ class MainWindow(QMainWindow):
     def on_export():
         Globals.signal.export_trigger.emit()
 
+    @staticmethod
+    def on_clean_app_dir():
+        clean_app_cache_dir()
+
+    @staticmethod
+    def on_open_app_dir():
+        open_file_url(get_app_cache_dir())
+
     def on_show_msg(self, msg):
         if Globals.signal.msgbox_trigger and msg:
             Message.show_info(msg, self)
 
     @staticmethod
     def open_file(msg):
-        QDesktopServices.openUrl(QUrl("file:///" + msg))
-        QDesktopServices.openUrl(QUrl("file:///" + os.path.dirname(msg)))
+        open_file_url(msg)
+        open_file_url(os.path.dirname(msg))
 
     @staticmethod
     def on_show_open_file(msg):

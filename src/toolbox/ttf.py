@@ -6,7 +6,7 @@ from PIL import ImageDraw, ImageFont, Image
 from fontTools.ttLib import TTFont
 
 from src.helper.common import Globals
-from src.helper.path import get_temp_path
+from src.helper.path import get_app_cache_dir
 from src.toolbox.atlas import Atlas
 from src.toolbox.characters import ESCAPE_SWAP_CHARS
 
@@ -65,7 +65,7 @@ class BMFontTTF:
 
         channel = (0, 0, 0, 0)
         files = []
-        from_path = os.path.join(get_temp_path(), "bmfont" + datetime.now().strftime("%Y%m%d%H%M%S"))
+        from_path = os.path.join(get_app_cache_dir(), datetime.now().strftime("%Y%m%d%H%M%S"))
         os.makedirs(from_path, exist_ok=True)
         for char in self.chars:
             size = self.font.getsize(char, stroke_width=self.stroke_width)

@@ -1,15 +1,17 @@
 import json
 import os
 
-from .path import is_ext_matched, get_temp_path
+from src.helper.path import is_ext_matched, get_app_cache_dir
 
 
 class Config:
     def __init__(self, filename):
-        path = os.path.join(get_temp_path(), filename)
-        self.path = path
+        dir_name = get_app_cache_dir()
+        os.makedirs(dir_name, exist_ok=True)
+        config_path = os.path.join(dir_name, filename)
+        self.path = config_path
         self.data = dict()
-        if os.path.isfile(path) and is_ext_matched(path, ".json"):
+        if os.path.isfile(config_path) and is_ext_matched(config_path, ".json"):
             self.__load()
         else:
             self.save()

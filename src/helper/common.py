@@ -41,8 +41,9 @@ class SingletonMeta(type):
 
 # 全局参数
 class GMenu:
-    help = "文件"
+    file = "文件"
     mode = "模式"
+    help = "帮助"
     # run = "运行"
     # preference = "首选项"
 
@@ -51,7 +52,9 @@ class GShortcut:
     manual = ["手册", "F1"]
     about = ["关于", "F2"]
     about_qt = ["关于Qt", "F3"]
-    export = ["导出", "Ctrl+E"]
+    export = ["导出Fnt", "Ctrl+E"]
+    clean = ["清除应用缓存", "Ctrl+Shift+E"]
+    open_app_dir = ["打开应用目录", "Ctrl+Shift+O"]
     mode_1 = ["配置模式", "Ctrl+1"]
     mode_2 = ["图集模式", "Ctrl+2"]
     mode_3 = ["字体模式", "Ctrl+3"]
@@ -83,12 +86,12 @@ class Globals:
 
     # 帮助文案
     help = r"""
-    BMFontGenerator
+BMFont Toolbox 是一款基于Qt6和PySide6的图片字生成工具。主要功能如下：
+    · 从图集生成位图字体（*.fnt）；
+    · 从TrueType Font生成位图字体（*.fnt）；
+    · 未来将支持OpenType Font等更很多方式。
     
-    BMFontGenerator是一款基于Python3和PIL的图片字生成器。
-    当前仅支持从图片生成FNT字体，未来将支持TTF、OTF等字体文件。
-    
-    注意：
+注意：
     · 使用时，将图片字放在指定目录，并命名为单字符对应的名称；
     · 部分特殊字符无法作为文件名，需要进行替换，规则如下：
     """

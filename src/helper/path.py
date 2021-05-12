@@ -1,11 +1,18 @@
 import os
 import sys
+from shutil import rmtree
 
+from PySide6.QtCore import QUrl
+from PySide6.QtGui import QDesktopServices
 from getfontname import get_font_name
 
 
 def get_temp_path():
     return os.environ.get("TEMP")
+
+
+def get_app_cache_dir():
+    return os.path.join(get_temp_path(), "bmfont")
 
 
 def get_user_root():
@@ -54,3 +61,13 @@ def get_system_fonts():
                     font = (where, name, family, mode)
                     fonts.append(font)
     return fonts
+
+
+def clean_app_cache_dir():
+    root = get_app_cache_dir()
+    for d in os.listdir(root):
+        rmtree(os.path.join(root, d), ignore_errors=True)
+
+
+def open_file_url(url):
+    QDesktopServices.openUrl(QUrl("file:///" + url))
