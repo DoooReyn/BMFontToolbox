@@ -1,7 +1,8 @@
 import os
 
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon, QAction
-from PySide6.QtWidgets import QMainWindow, QMenu
+from PySide6.QtWidgets import QMainWindow, QMenu, QDockWidget
 
 from src.helper.common import GShortcut, GMenu, GResource, Globals
 from src.helper.path import clean_app_cache_dir, get_app_cache_dir, open_file_url
@@ -16,6 +17,8 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.atlas_dock = None
+        self.font_dock = None
         self.current_mode = Globals.Mode.setting.value
         self.setWindowTitle("BMFont Toolbox")
         self.setWindowIcon(QIcon(GResource.icon_window))
@@ -32,11 +35,6 @@ class MainWindow(QMainWindow):
             (None, GShortcut.export[0], GShortcut.export[1], self.on_export),
             (None, GShortcut.open_app_dir[0], GShortcut.open_app_dir[1], self.on_open_app_dir),
             (None, GShortcut.clean[0], GShortcut.clean[1], self.on_clean_app_dir)
-        ])
-        self.add_menu(GMenu.mode, [
-            (None, GShortcut.mode_1[0], GShortcut.mode_1[1], self.on_change_to_mode_1),
-            (None, GShortcut.mode_2[0], GShortcut.mode_2[1], self.on_change_to_mode_2),
-            (None, GShortcut.mode_3[0], GShortcut.mode_3[1], self.on_change_to_mode_3)
         ])
         self.add_menu(GMenu.help, [
             (None, GShortcut.manual[0], GShortcut.manual[1], self.on_view_manual),
@@ -58,33 +56,36 @@ class MainWindow(QMainWindow):
         self.menuBar().addMenu(menu)
 
     def open(self):
-        self.on_change_mode(self.current_mode)
+        cw = self.centralWidget()
+        if cw:
+            cw.hide()
 
-    def on_change_to_mode_1(self):
-        if self.current_mode != Globals.Mode.setting.value:
-            self.current_mode = Globals.Mode.setting.value
-            self.on_change_mode(self.current_mode)
+        setting_dock = QDockWidget("基础配置", self)
+        setting_dock.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetMovable)
+        setting_dock.setWidget(SettingUI())
+        setting_dock.setMaximumHeight(120)
+        self.addDockWidget(Qt.TopDockWidgetArea, setting_dock)
 
-    def on_change_to_mode_2(self):
-        if self.current_mode != Globals.Mode.atlas.value:
-            self.current_mode = Globals.Mode.atlas.value
-            self.on_change_mode(self.current_mode)
+        atlas_dock = QDockWidget("图集模式", self)
+        atlas_dock.setFeatures(QDockWidget.DockWidgetFeature.NoDockWidgetFeatures)
+        atlas_dock.setWidget(AtlasUI())
+        atlas_dock.setEnabled(True)
+        self.atlas_dock = atlas_dock
+        self.addDockWidget(Qt.BottomDockWidgetArea, atlas_dock)
 
-    def on_change_to_mode_3(self):
-        if self.current_mode != Globals.Mode.font.value:
-            self.current_mode = Globals.Mode.font.value
-            self.on_change_mode(self.current_mode)
+        font_dock = QDockWidget("字体模式", self)
+        font_dock.setFeatures(QDockWidget.DockWidgetFeature.NoDockWidgetFeatures)
+        font_dock.setWidget(FontUI())
+        font_dock.setEnabled(False)
+        font_dock.hide()
+        self.font_dock = font_dock
+        self.addDockWidget(Qt.BottomDockWidgetArea, font_dock)
 
     def on_change_mode(self, mode):
-        widget = None
-        if mode == Globals.Mode.atlas.value:
-            widget = AtlasUI()
-        elif mode == Globals.Mode.font.value:
-            widget = FontUI()
-        elif mode == Globals.Mode.setting.value:
-            widget = SettingUI()
-        if widget:
-            self.setCentralWidget(widget)
+        self.atlas_dock.setEnabled(mode == Globals.Mode.atlas.value)
+        self.font_dock.setEnabled(mode == Globals.Mode.font.value)
+        self.atlas_dock.setVisible(mode == Globals.Mode.atlas.value)
+        self.font_dock.setVisible(mode == Globals.Mode.font.value)
 
     def closeEvent(self, event):
         Globals.config.set(Globals.UserData.window_width, self.width())

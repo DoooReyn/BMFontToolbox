@@ -5,12 +5,13 @@ from PySide6.QtWidgets import QGridLayout, QWidget
 class BaseUI(QWidget):
     def __init__(self, parent=None):
         super(BaseUI, self).__init__(parent)
+        self.main_layout = None
         self.setup_ui()
 
     def init_layout(self):
         self.main_layout = QGridLayout()
-        self.main_layout.setHorizontalSpacing(10)
-        self.main_layout.setVerticalSpacing(10)
+        self.main_layout.setHorizontalSpacing(4)
+        self.main_layout.setVerticalSpacing(4)
         self.main_layout.setContentsMargins(10, 10, 10, 10)
         self.main_layout.setAlignment(QtCore.Qt.AlignTop | QtCore.Qt.AlignLeft)
         self.setLayout(self.main_layout)
