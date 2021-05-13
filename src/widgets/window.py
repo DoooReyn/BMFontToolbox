@@ -61,7 +61,7 @@ class MainWindow(QMainWindow):
             cw.hide()
 
         setting_dock = QDockWidget("基础配置", self)
-        setting_dock.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetMovable)
+        setting_dock.setFeatures(QDockWidget.DockWidgetFeature.NoDockWidgetFeatures)
         setting_dock.setWidget(SettingUI())
         setting_dock.setMaximumHeight(120)
         self.addDockWidget(Qt.TopDockWidgetArea, setting_dock)
