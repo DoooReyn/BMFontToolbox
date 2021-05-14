@@ -113,6 +113,9 @@ class FontUI(BaseUI):
         return self.custom_font_path
 
     def on_export(self):
+        if not self.isEnabled() or not self.isVisible():
+            return
+
         output_dir = Globals.config.get(Globals.UserData.output_dir)
         if not (os.path.exists(output_dir) and os.path.isdir(output_dir)):
             Message.show_error("无效的输出目录！", self)

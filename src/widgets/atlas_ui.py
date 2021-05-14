@@ -78,6 +78,9 @@ class AtlasUI(BaseUI):
         return self.image_line_edit.text()
 
     def on_start_clicked(self):
+        if not self.isEnabled() or not self.isVisible():
+            return
+
         from_dir = self.get_image_dir()
         if not (os.path.exists(from_dir) and os.path.isdir(from_dir)):
             Message.show_error("无效的图集目录！", self)
