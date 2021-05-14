@@ -5,6 +5,7 @@ from PIL import Image
 from src.helper.common import Globals
 from src.toolbox.characters import ESCAPE_CHARS, TOP_ALIGNMENT_CHARS, BOTTOM_ALIGNMENT_CHARS
 from src.toolbox.definition import FntChar, FntWriter, Alignment
+from src.widgets.message import Message
 
 
 class BMFontGenerator:
@@ -15,23 +16,31 @@ class BMFontGenerator:
         self.__fntname = os.path.join(output, "%s.fnt" % filename)
         self.__where = where
         self.__textures = []
+        self.__atlas = atlas
         self.__width = 0
         self.__height = 0
         self.__total_width = 0
         self.__lines = 1
-        self.__read_textures(where)
-        self.__parse_textures()
-        self.__merge_textures()
+        self.__invalid_textures = []
+        if self.__check_textures():
+            self.__parse_textures()
+            self.__merge_textures()
 
-    def __read_textures(self, where):
-        for root, _, files in os.walk(where):
-            for file in files:
-                if os.path.splitext(file)[-1] == ".png":
-                    full = os.path.join(root, file)
-                    image = Image.open(full)
-                    self.__textures.append((full, image))
+    def __check_textures(self):
+        for file in self.__atlas:
+            base = os.path.splitext(os.path.basename(file))
+            ext = base[1]
+            if ext.lower() == ".png":
+                image = Image.open(file)
+                if image.width < self.__max_width:
+                    self.__textures.append((file, image))
+            else:
+                self.__invalid_textures.append(file)
+
         if len(self.__textures) == 0:
-            print("无效的图片字路径: %s" % self.__where)
+            Message.show_error("未找到有效的图集", Globals.main_window)
+            return False
+        return True
 
     def __parse_textures(self):
         self.__textures_in_line = []
@@ -53,13 +62,13 @@ class BMFontGenerator:
         one_height = int(self.__height / self.__lines)
         writer = FntWriter()
         writer.set_font(size=one_height)
-        writer.set_count(len(self.__textures))
         writer.set_size(self.__width, self.__height, one_height)
 
         size = (self.__width, self.__height)
         channel = (255, 255, 255, 0)
         merge = Image.new("RGBA", size, channel)
         x = 0
+        count = 0
         for i, line in enumerate(self.__textures_in_line):
             for _, v in enumerate(line):
                 y = int(i * one_height)
@@ -96,14 +105,23 @@ class BMFontGenerator:
                     char.xadvance = char.width
                     char.chnl = 15
                     writer.add_char(char.text())
-                    x += img.width
                     merge.paste(img, region)
-                    print("正在添加字符: %s => %s" % (code, char.id))
-                except TypeError:
+                    x += img.width
+                    count += 1
+                    print("Atlas正在添加字符: %s => %s" % (base, char.id))
+                except Exception:
                     print("无效的字符: %s" % base)
-        merge.save(self.__filename)
-        writer.save(self.__fntname)
-        Globals.signal.open_file_trigger.emit(self.__filename)
+                    self.__invalid_textures.append(path)
+
+        if count > 0:
+            writer.set_count(count)
+            merge.save(self.__filename)
+            writer.save(self.__fntname)
+            Globals.signal.open_file_trigger.emit(self.__filename)
+
+        if len(self.__invalid_textures) > 0:
+            msg = [file + "\n" for file in self.__invalid_textures]
+            Message.show_warning("无效的字符：\n" + "".join(msg), Globals.main_window)
 
 
 class Atlas:
@@ -115,4 +133,5 @@ class Atlas:
         output_dir = self.configuration.get("output")
         atlas = self.configuration.get("atlas")
         max_width = self.configuration.get("max_width") or 1024
-        BMFontGenerator(from_dir, output_dir, os.path.basename(from_dir), atlas, max_width, Alignment.Bottom)
+        save_file = self.configuration.get("save_file")
+        BMFontGenerator(from_dir, output_dir, save_file, atlas, max_width, Alignment.Bottom)

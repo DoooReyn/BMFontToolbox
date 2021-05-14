@@ -1,5 +1,4 @@
 import os
-import sys
 from datetime import datetime
 
 from PIL import ImageDraw, ImageFont, Image
@@ -20,8 +19,8 @@ class BMFontTTF:
         self.ttf = None
         self.glyf = None
         self.font = None
-        self.__check_ttf(ttf)
-        self.__check_chars(chars)
+        if self.__check_ttf(ttf):
+            self.__check_chars(chars)
 
     def __check_ttf(self, ttf):
         if os.path.isfile(ttf) and (os.path.splitext(ttf)[-1]).lower() == ".ttf":
@@ -30,7 +29,11 @@ class BMFontTTF:
             self.font = ImageFont.truetype(ttf, self.size)
         else:
             print("找不到字体: %s" % ttf)
-            sys.exit(-1)
+            return False
+        if not self.glyf or not self.font:
+            print("无效的字体: %s" % ttf)
+            return False
+        return True
 
     def __check_chars(self, text):
         chars = []
@@ -40,9 +43,10 @@ class BMFontTTF:
                 chars.append(char)
         if len(chars) == 0:
             print("找不到有效的输入字符")
-            sys.exit(-1)
+            return False
         self.chars = sorted(chars)
         self.chars.append(u"\u0020")
+        return True
 
     def has_char(self, char):
         try:
@@ -51,17 +55,20 @@ class BMFontTTF:
             print("无效的字符: %s" % char)
             return False
 
-    def save(self, path):
+    def save(self, path, save_file):
         if path is None:
             print("无效的保存位置: %s" % str(path))
-            sys.exit(-1)
+            return
         os.makedirs(path, exist_ok=True)
         if not os.path.isdir(path):
             print("无效的保存位置: %s" % str(path))
-            sys.exit(-1)
+            return
         else:
             # rmtree(path, ignore_errors=True)
             os.makedirs(path, exist_ok=True)
+
+        if not self.chars or len(self.chars) == 0:
+            return
 
         channel = (0, 0, 0, 0)
         files = []
@@ -78,7 +85,7 @@ class BMFontTTF:
                       stroke_fill=self.stroke_color, stroke_width=self.stroke_width)
             repl = ESCAPE_SWAP_CHARS.get(char)
             repl = repl or char
-            print("正在添加字符: %s" % char)
+            print("TTF正在添加字符: %s => %s" % (char, repl))
             filename = os.path.join(from_path, "%s.png" % repl)
             image.save(filename)
             files.append(filename)
@@ -87,7 +94,8 @@ class BMFontTTF:
             "image": from_path,
             "output": path,
             "atlas": files,
-            "max_width": Globals.get_max_width()
+            "max_width": Globals.get_max_width(),
+            "save_file": save_file
         }).generate()
 
 
@@ -100,4 +108,5 @@ class TTF:
         chars = self.configuration.get("chars")
         output = self.configuration.get("output")
         font_size = self.configuration.get("font_size")
-        BMFontTTF(ttf=where, chars=chars, size=font_size).save(output)
+        save_file = self.configuration.get("save_file")
+        BMFontTTF(ttf=where, chars=chars, size=font_size).save(output, save_file)

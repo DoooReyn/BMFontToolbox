@@ -90,9 +90,12 @@ class AtlasUI(BaseUI):
             Message.show_error("图集目录下未找到有效图集！", self)
             return
 
+        output_dir = Globals.config.get(Globals.UserData.output_dir)
+        save_file = Globals.config.get(Globals.UserData.font_save_name)
         FontFactory.run_with(FontMode.Atlas, {
             "image": self.image_line_edit.text(),
-            "output": Globals.config.get(Globals.UserData.output_dir),
+            "output": output_dir,
+            "save_file": save_file,
             "atlas": self.image_atlas,
             "max_width": Globals.get_max_width()
         })

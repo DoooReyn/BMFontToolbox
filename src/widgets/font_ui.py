@@ -126,9 +126,12 @@ class FontUI(BaseUI):
             Message.show_error("请填写有效的输出字符", Globals.main_window)
             return
 
+        output_dir = Globals.config.get(Globals.UserData.output_dir)
+        save_file = Globals.config.get(Globals.UserData.font_save_name)
         FontFactory().run_with(FontMode.Ttf, {
             "where": where,
-            "output": Globals.config.get(Globals.UserData.output_dir),
+            "output": output_dir,
+            "save_file": save_file,
             "max_width": Globals.get_max_width(),
             "chars": chars,
             "font_size": Globals.config.get(Globals.UserData.font_size)

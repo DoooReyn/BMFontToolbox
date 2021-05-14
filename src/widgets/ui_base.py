@@ -33,9 +33,9 @@ class BaseUI(QWidget):
             Message.show_error("无效的输出目录！", self)
             return False
 
-        save_as_path = os.path.join(output_dir, Globals.config.get(Globals.UserData.font_save_name) + ".png")
-        if os.path.exists(save_as_path):
-            Message.show_error("已存在同名文件！", self)
-            return False
+        # save_as_path = os.path.join(output_dir, Globals.config.get(Globals.UserData.font_save_name) + ".png")
+        # if os.path.exists(save_as_path):
+        #     Message.show_error("已存在同名文件！", self)
+        #     return False
 
         return True
