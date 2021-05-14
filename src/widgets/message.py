@@ -3,7 +3,7 @@ from enum import Enum
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QMessageBox
 
-from src.helper.common import GResource, Globals
+from helper.common import GResource, Globals
 
 
 class Level(Enum):

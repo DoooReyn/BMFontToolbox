@@ -2,10 +2,10 @@ import os
 
 from PIL import Image
 
-from src.helper.common import Globals
-from src.toolbox.characters import ESCAPE_CHARS, TOP_ALIGNMENT_CHARS, BOTTOM_ALIGNMENT_CHARS
-from src.toolbox.definition import FntChar, FntWriter, Alignment
-from src.widgets.message import Message
+from helper.common import Globals
+from toolbox.characters import ESCAPE_CHARS, TOP_ALIGNMENT_CHARS, BOTTOM_ALIGNMENT_CHARS
+from toolbox.definition import FntChar, FntWriter, Alignment
+from widgets.message import Message
 
 
 class BMFontGenerator:

@@ -4,13 +4,13 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon, QAction
 from PySide6.QtWidgets import QMainWindow, QMenu, QDockWidget
 
-from src.helper.common import GShortcut, GMenu, GResource, Globals
-from src.helper.path import clean_app_cache_dir, get_app_cache_dir, open_file_url
-from src.toolbox.characters import ESCAPE_SWAP_CHARS
-from src.widgets.atlas_ui import AtlasUI
-from src.widgets.font_ui import FontUI
-from src.widgets.message import Message
-from src.widgets.setting_ui import SettingUI
+from helper.common import GShortcut, GMenu, GResource, Globals
+from helper.path import clean_app_cache_dir, get_app_cache_dir, open_file_url
+from toolbox.characters import ESCAPE_SWAP_CHARS
+from widgets.atlas_ui import AtlasUI
+from widgets.font_ui import FontUI
+from widgets.message import Message
+from widgets.setting_ui import SettingUI
 
 
 class MainWindow(QMainWindow):

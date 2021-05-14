@@ -4,11 +4,11 @@ from PySide6 import QtCore
 from PySide6.QtGui import QStandardItemModel, QStandardItem
 from PySide6.QtWidgets import QLabel, QLineEdit, QListView, QPushButton, QFileDialog
 
-from src.helper.common import Globals
-from src.helper.path import get_image_files
-from src.toolbox.font import FontFactory, FontMode
-from src.widgets.message import Message
-from src.widgets.ui_base import BaseUI
+from helper.common import Globals
+from helper.path import get_image_files
+from toolbox.font import FontFactory, FontMode
+from widgets.message import Message
+from widgets.ui_base import BaseUI
 
 
 class AtlasUI(BaseUI):

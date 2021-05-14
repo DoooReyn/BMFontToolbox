@@ -1,7 +1,7 @@
 import json
 import os
 
-from src.helper.path import is_ext_matched, get_app_cache_dir
+from helper.path import is_ext_matched, get_app_cache_dir
 
 
 class Config:
@@ -11,14 +11,17 @@ class Config:
         config_path = os.path.join(dir_name, filename)
         self.path = config_path
         self.data = dict()
-        if os.path.isfile(config_path) and is_ext_matched(config_path, ".json"):
+        if os.path.isfile(config_path):
             self.__load()
         else:
             self.save()
 
     def __load(self):
         with open(self.path, "rt", encoding="utf8") as f:
-            self.data = json.loads(f.read())
+            try:
+                self.data = json.loads(f.read())
+            except:
+                self.data = {}
 
     def save(self):
         with open(self.path, "wt", encoding="utf8") as f:

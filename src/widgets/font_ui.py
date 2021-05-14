@@ -6,11 +6,11 @@ from PySide6.QtWidgets import QLabel, QComboBox, QRadioButton, QButtonGroup, QPu
     QFileDialog
 from getfontname import get_font_name
 
-from src.helper.common import Globals
-from src.helper.path import get_system_fonts
-from src.toolbox.font import FontFactory, FontMode
-from src.widgets.message import Message
-from src.widgets.ui_base import BaseUI
+from helper.common import Globals
+from helper.path import get_system_fonts
+from toolbox.font import FontFactory, FontMode
+from widgets.message import Message
+from widgets.ui_base import BaseUI
 
 
 class MLineEdit(QPlainTextEdit):

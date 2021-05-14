@@ -3,8 +3,8 @@ import os
 from PySide6 import QtCore
 from PySide6.QtWidgets import QGridLayout, QWidget
 
-from src.helper.common import Globals
-from src.widgets.message import Message
+from helper.common import Globals
+from widgets.message import Message
 
 
 class BaseUI(QWidget):

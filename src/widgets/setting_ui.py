@@ -4,8 +4,8 @@ from PySide6 import QtCore
 from PySide6.QtWidgets import QLabel, QComboBox, QSpinBox, QLineEdit, QFileDialog, QRadioButton, \
     QButtonGroup
 
-from src.helper.common import Globals
-from src.widgets.ui_base import BaseUI
+from helper.common import Globals
+from widgets.ui_base import BaseUI
 
 
 class SettingUI(BaseUI):

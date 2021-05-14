@@ -4,10 +4,10 @@ from datetime import datetime
 from PIL import ImageDraw, ImageFont, Image
 from fontTools.ttLib import TTFont
 
-from src.helper.common import Globals
-from src.helper.path import get_app_cache_dir
-from src.toolbox.atlas import Atlas
-from src.toolbox.characters import ESCAPE_SWAP_CHARS
+from helper.common import Globals
+from helper.path import get_app_cache_dir
+from toolbox.atlas import Atlas
+from toolbox.characters import ESCAPE_SWAP_CHARS
 
 
 class BMFontTTF:
