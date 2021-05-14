@@ -15,6 +15,7 @@ if __name__ == "__main__":
     Globals.config.init(Globals.UserData.output_dir, get_user_document())
     Globals.config.init(Globals.UserData.custom_dir, get_user_document())
     Globals.config.init(Globals.UserData.import_text_dir, get_user_document())
+    Globals.config.init(Globals.UserData.font_save_name, "font")
     Globals.config.init(Globals.UserData.font_size, 10)
     Globals.config.init(Globals.UserData.window_width, 640)
     Globals.config.init(Globals.UserData.window_height, 480)

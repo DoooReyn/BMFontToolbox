@@ -78,17 +78,12 @@ class AtlasUI(BaseUI):
         return self.image_line_edit.text()
 
     def on_start_clicked(self):
-        if not self.isEnabled() or not self.isVisible():
+        if not self.check_is_ready():
             return
 
         from_dir = self.get_image_dir()
         if not (os.path.exists(from_dir) and os.path.isdir(from_dir)):
             Message.show_error("无效的图集目录！", self)
-            return
-
-        output_dir = Globals.config.get(Globals.UserData.output_dir)
-        if not (os.path.exists(output_dir) and os.path.isdir(output_dir)):
-            Message.show_error("无效的输出目录！", self)
             return
 
         if len(self.image_atlas) <= 0:
@@ -97,7 +92,7 @@ class AtlasUI(BaseUI):
 
         FontFactory.run_with(FontMode.Atlas, {
             "image": self.image_line_edit.text(),
-            "output": output_dir,
+            "output": Globals.config.get(Globals.UserData.output_dir),
             "atlas": self.image_atlas,
             "max_width": Globals.get_max_width()
         })

@@ -113,12 +113,7 @@ class FontUI(BaseUI):
         return self.custom_font_path
 
     def on_export(self):
-        if not self.isEnabled() or not self.isVisible():
-            return
-
-        output_dir = Globals.config.get(Globals.UserData.output_dir)
-        if not (os.path.exists(output_dir) and os.path.isdir(output_dir)):
-            Message.show_error("无效的输出目录！", self)
+        if not self.check_is_ready():
             return
 
         where = self.get_font_path()
@@ -133,7 +128,7 @@ class FontUI(BaseUI):
 
         FontFactory().run_with(FontMode.Ttf, {
             "where": where,
-            "output": output_dir,
+            "output": Globals.config.get(Globals.UserData.output_dir),
             "max_width": Globals.get_max_width(),
             "chars": chars,
             "font_size": Globals.config.get(Globals.UserData.font_size)

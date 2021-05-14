@@ -1,7 +1,7 @@
 import os
 
 from PySide6 import QtCore
-from PySide6.QtWidgets import QLabel, QComboBox, QSpinBox, QLineEdit, QPushButton, QFileDialog, QRadioButton, \
+from PySide6.QtWidgets import QLabel, QComboBox, QSpinBox, QLineEdit, QFileDialog, QRadioButton, \
     QButtonGroup
 
 from src.helper.common import Globals
@@ -13,6 +13,7 @@ class SettingUI(BaseUI):
         self.max_width_index = Globals.config.get(Globals.UserData.max_width_index)
         self.max_width_combo = None
         self.size_spin = None
+        self.output_name_edit = None
         self.output_line_edit = None
         super(SettingUI, self).__init__()
 
@@ -31,7 +32,8 @@ class SettingUI(BaseUI):
         size_spin.valueChanged.connect(self.on_save_font_size)
 
         output_name_label = QLabel(text="输出名称", alignment=QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        output_name_edit = QLineEdit("font")
+        output_name_edit = QLineEdit(Globals.config.get(Globals.UserData.font_save_name))
+        output_name_edit.textEdited.connect(self.on_output_name_edited)
 
         output_label = QLabel(text="输出目录", alignment=QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         output_line_edit = QLineEdit(Globals.config.get(Globals.UserData.output_dir))
@@ -61,6 +63,7 @@ class SettingUI(BaseUI):
 
         self.max_width_combo = max_width_combo
         self.size_spin = size_spin
+        self.output_name_edit = output_name_edit
         self.output_line_edit = output_line_edit
 
     @staticmethod
@@ -81,3 +84,6 @@ class SettingUI(BaseUI):
             dirname = os.path.abspath(url)
             Globals.config.set(Globals.UserData.output_dir, dirname)
             self.output_line_edit.setText(dirname)
+
+    def on_output_name_edited(self):
+        Globals.config.set(Globals.UserData.font_save_name, self.output_name_edit.text())

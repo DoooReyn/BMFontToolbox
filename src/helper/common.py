@@ -77,6 +77,7 @@ class Globals:
         window_height = "window_height"
         max_width_index = "max_width_index"
         font_size = "font_size"
+        font_save_name = "font_save_name"
 
     class Mode(Enum):
         """模式枚举（主要页面）"""
