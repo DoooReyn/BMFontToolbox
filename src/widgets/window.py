@@ -11,6 +11,7 @@ from widgets.atlas_ui import AtlasUI
 from widgets.font_ui import FontUI
 from widgets.message import Message
 from widgets.setting_ui import SettingUI
+import helper.resources
 
 
 class MainWindow(QMainWindow):

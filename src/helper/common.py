@@ -62,9 +62,9 @@ class GShortcut:
 
 
 class GResource:
-    icon_window = ":icon.svg"
-    icon_manual = ":notes.svg"
-    icon_help = ":help.svg"
+    icon_window = ":/icon.svg"
+    icon_manual = ":/notes.svg"
+    icon_help = ":/help.svg"
 
 
 class Globals:
