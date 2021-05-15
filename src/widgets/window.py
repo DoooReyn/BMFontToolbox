@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
             (None, GShortcut.clean[0], GShortcut.clean[1], self.on_clean_app_dir)
         ])
         self.add_menu(GMenu.help, [
-            (None, GShortcut.manual[0], GShortcut.manual[1], self.on_view_manual),
+            (GResource.icon_manual, GShortcut.manual[0], GShortcut.manual[1], self.on_view_manual),
             (None, GShortcut.about[0], GShortcut.about[1], self.on_view_about),
             (None, GShortcut.about_qt[0], GShortcut.about_qt[1], self.on_view_about_qt)
         ])

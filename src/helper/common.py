@@ -2,6 +2,7 @@ from enum import Enum
 
 from PySide6.QtCore import QObject, Signal
 from PySide6.QtWidgets import QLayout
+import helper.resources
 
 
 def clear_widgets(layout: QLayout = None):
@@ -61,9 +62,9 @@ class GShortcut:
 
 
 class GResource:
-    icon_window = "resources:icon.svg"
-    icon_manual = "resources:notes.svg"
-    icon_help = "resources:help.svg"
+    icon_window = ":icon.svg"
+    icon_manual = ":notes.svg"
+    icon_help = ":help.svg"
 
 
 class Globals:

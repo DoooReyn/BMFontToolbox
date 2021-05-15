@@ -28,7 +28,6 @@ if __name__ == "__main__":
     Globals.config.init(Globals.UserData.window_width, 640)
     Globals.config.init(Globals.UserData.window_height, 480)
     Globals.config.init(Globals.UserData.max_width_index, 1)
-    QDir.addSearchPath("resources", "./static/")
     Globals.main_window = MainWindow()
     Globals.main_window.resize(Globals.config.get(Globals.UserData.window_width), Globals.config.get(Globals.UserData.window_height))
     Globals.main_window.show()

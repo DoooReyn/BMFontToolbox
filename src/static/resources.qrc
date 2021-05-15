@@ -1,0 +1,8 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/">
+<file>help.svg</file>
+<file>icon.ico</file>
+<file>icon.svg</file>
+<file>notes.svg</file>
+</qresource>
+</RCC>
