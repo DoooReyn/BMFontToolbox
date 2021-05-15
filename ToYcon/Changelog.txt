@@ -1,0 +1,77 @@
+0.9
+ - Remove the useless "Choose type" option
+ - Add an option to change the widget image and remove the option to change the widget size.
+ - Some performance improvment
+ - Add multithread for batch conversion
+ - Fix crash with some directories
+ - Fix potential startup crash 
+ - Various bug fixes in all image loaders
+ - Remove old translations
+
+0.8
+ - Bug fix: corrupt Vista format
+ - Bug fix: resize problem
+ - Bug fix: presets not saved
+
+0.7
+ - Better image resize
+ - Bug fix: cannot convert read only files
+
+0.6
+ - Fix a memory leak.
+ - Conversion Ico -> Png
+ - Fix 32bits icon*
+ - New translations: png conversion options
+
+0.5.1
+ - Bug fix: conversion doesn't work if 'Choose destination' is disabled
+
+0.5
+ - Rewrite resize algorithm
+ - Rewrite color quantization algorithm
+ - New conversion : 
+  * Gif -> Ico
+ - Auto detect image
+ - Bug fix in resize stuff
+ - Bug fix in updater
+
+0.4
+ - New conversion : 
+  * Bmp -> Ico
+  * Jpg -> Ico
+  * Tga -> Ico
+ - New translations (Bulgarian and Portuguese)
+ - Auto-update can now check if there are new translations
+ - Fix Vista bug
+
+0.3.1
+ - Fix bug with new format window
+ - Format selection combobox is no longer editable
+ - Save last format settings
+ - Remove libpng13.dll and zlib1.dll dependencies
+
+0.3
+ - Add an option to be able to choose where ToYcon will write output icons
+ - Add a popup window that ask what to do when the output file already exists
+ - Make a new Choose format window
+ - Add a new format : 256 non-png compressed
+ - Bug fixes : Sometimes ToYcon didn't find all pngs into directories
+
+0.2.2
+ - Update translations (Croatian, Deutsch, Dutch, English, French, Italian)
+ - Minor optimizations
+ - Change the order in which different format are store into ico to force Windows to display the best format
+
+0.2.1
+ - Add the ability to automatically download updates
+ - Some minor cosmetic change
+
+0.2
+ - Reduce memory usage
+ - Include image into exe
+ - Add many options (systray, always on top, pin to destop)
+ - New translations (thanks to Schlumpf, markh, ZuGro, TLemur, Krcko, MatrixIsAllOver, AlleyKat, Unicorn2, teo, Lachezar and Efdur)
+ - Bug fixes :)
+
+0.1
+ - Initial release

@@ -1,0 +1,19 @@
+LICENSE AGREEMENT: 
+
+Your use of ToYcon is governed by the following conditions.
+Please read this information carefully before using ToYcon.
+By using it you are agreeing to the following conditions:
+
+1. ToYcon is freeware and can be freely used for any personal non-commercial purposes.
+You cannot use it for any company or business purposes.
+
+2. ToYcon can be only distributed electronically through the official host www.customxp.net. 
+Distribution through other websites or in any other form without the author's permission is prohibited.
+For distribution through free CD/DVD Magazine addon contact the author for permission.
+
+3. ToYcon is a copyrighted material of Lefreut.
+You may not decompile, disassemble or otherwise reverse engineer this product.
+You may not alter or modify ToYcon in any way.
+
+
+Copyright (C) 2006-2010, Lefreut
