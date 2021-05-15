@@ -62,9 +62,11 @@ class GShortcut:
 
 
 class GResource:
-    icon_window = ":/icon.svg"
-    icon_manual = ":/notes.svg"
-    icon_help = ":/help.svg"
+    icon_window = ":/icon.ico"
+    icon_manual = ":/icon.ico"
+    icon_help = ":/icon.ico"
+    icon_ico = ":/icon.ico"
+    app_icon = ":/app.ico"
 
 
 class Globals:
@@ -103,6 +105,9 @@ BMFont Toolbox 是一款基于Qt6和PySide6的图片字生成工具。主要功�
 
     # 全局应用变量存点
     app = None
+
+    # 应用程序路径
+    app_dir = None
 
     # 全局主窗口存点
     main_window = None

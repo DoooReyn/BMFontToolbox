@@ -16,8 +16,18 @@ plugin_path = os.path.join(dirname, 'plugins', 'platforms')
 os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = plugin_path
 print(plugin_path)
 
+def app_path():
+    ret = None
+    """Returns the base application path."""
+    if hasattr(sys, 'frozen'):
+        # Handles PyInstaller
+        ret = os.path.dirname(sys.executable)
+    ret = os.path.dirname(__file__)
+    return os.path.abspath(ret)
+
 if __name__ == "__main__":
     Globals.app = QApplication([])
+    Globals.app_dir = app_path()
     Globals.config = Config("bmfont_toolbox_config.json")
     Globals.config.init(Globals.UserData.images_dir, get_user_picture())
     Globals.config.init(Globals.UserData.output_dir, get_user_document())
