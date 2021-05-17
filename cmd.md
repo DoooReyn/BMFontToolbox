@@ -5,4 +5,5 @@
 - 安装项目依赖：`pip install -r requirements.txt`
 - 重新生成依赖：`pipreqs ./ --encoding=utf8`
 - 转换.qrc为.py：`pyside6-rcc resources.qrc -o ../../helper/resources.py`
-- 打包： `pyinstaller ./src/*.py -D -w -n Fnt工具箱 --clean -y -i app.ico --upx-dir=./upx`
+- 一次打包： `pyinstaller ./src/*.py -D -w -n Fnt工具箱 --clean -y -i app.ico --upx-dir=./upx`
+- upx封包：`pyinstaller Fnt工具箱.spec -y --clean --upx-dir=./upx`

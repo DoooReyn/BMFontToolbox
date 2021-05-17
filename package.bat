@@ -1,0 +1,1 @@
+pyinstaller Fnt工具箱.spec -y --clean --upx-dir=./upx

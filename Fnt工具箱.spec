@@ -3,15 +3,15 @@
 
 block_cipher = None
 
-add_files = [
-  ('./requires', '.'),
-  ('./src/static', '.')
+
+datas = [
+  ('./requires', '.')
 ]
 
 a = Analysis(['src\\__main__.py'],
              pathex=['F:\\dev\\code\\mine\\bmfont'],
              binaries=[],
-             datas=add_files,
+             datas=datas,
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
@@ -31,7 +31,7 @@ exe = EXE(pyz,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
-          console=True , icon='app.ico')
+          console=False , icon='src/static/app.ico')
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
