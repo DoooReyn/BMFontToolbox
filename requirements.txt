@@ -1,4 +1,4 @@
-PySide6~=6.0.2
+PySide6~=6.1.0
 Pillow~=8.2.0
 fonttools~=4.22.0
 getfontname~=0.0.3
