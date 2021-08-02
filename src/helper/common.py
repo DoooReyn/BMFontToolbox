@@ -18,6 +18,7 @@ class GSignal(QObject):
     export_trigger = Signal()
     open_file_trigger = Signal(str)
     mode_trigger = Signal(int)
+    font_info_trigger  = Signal()
 
 
 class SingletonMeta(type):

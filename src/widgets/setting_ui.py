@@ -76,6 +76,8 @@ class SettingUI(BaseUI):
 
     def on_save_font_size(self):
         Globals.config.set(Globals.UserData.font_size, self.size_spin.value())
+        Globals.signal.font_info_trigger.emit()
+
 
     def on_output_choose_clicked(self):
         where = Globals.config.get(Globals.UserData.output_dir)

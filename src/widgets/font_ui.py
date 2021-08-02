@@ -41,6 +41,7 @@ class FontUI(BaseUI):
         self.custom_family = None
         self.custom_font_path = None
         Globals.signal.export_trigger.connect(self.on_export)
+        Globals.signal.font_info_trigger.connect(self.on_font_info_changed)
         super(FontUI, self).__init__()
 
     def setup_ui(self):
@@ -94,6 +95,9 @@ class FontUI(BaseUI):
 
         self.refresh_font()
 
+    def on_font_info_changed(self):
+        self.refresh_font()
+
     def on_import_btn_clicked(self):
         where = Globals.config.get(Globals.UserData.import_text_dir)
         url, types = QFileDialog().getOpenFileName(dir=where, filter="Text Files Only (*.txt)")
@@ -101,6 +105,7 @@ class FontUI(BaseUI):
             Globals.config.set(Globals.UserData.import_text_dir, os.path.abspath(os.path.dirname(url)))
             with open(url, "rt", encoding="utf8") as f:
                 self.input_edit.setPlainText(f.read())
+                self.refresh_font()
 
     def on_custom_radio_toggled(self, state):
         self.custom_btn.setEnabled(state)
@@ -155,6 +160,7 @@ class FontUI(BaseUI):
             self.custom_edit.setText("")
             self.custom_font_path = None
             self.custom_family = None
+            self.refresh_font()
 
     def refresh_font(self):
         font = None
