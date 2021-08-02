@@ -1,0 +1,1 @@
+python src/make_resources.py
