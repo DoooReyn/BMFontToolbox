@@ -5,7 +5,7 @@ SetCompress force
 ; base
 !define TEMP_NAME "bmfont"
 !define PRODUCT_NAME "BMFontToolbox"
-!define PRODUCT_VERSION "1.0.0.0"
+!define PRODUCT_VERSION "1.0.0.2"
 !define PRODUCT_COMPANY "DoooReyn"
 
 VIProductVersion "${PRODUCT_VERSION}"

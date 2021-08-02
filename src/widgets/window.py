@@ -39,12 +39,7 @@ class MainWindow(QMainWindow):
         self.font_dock = None
         self.current_mode = Globals.Mode.setting.value
         self.setWindowTitle("BMFont Toolbox")
-        self.setWindowIcon(GMakeIcon(GRes.app_ico))
-        # icon_path = os.path.join(Globals.app_dir, "static/app.ico")
-        # icon_b64 = Base64ToBytes(icon_path)
-        # print(icon_b64)
-        # print(icon_path)
-        # self.setWindowIcon(iconFromBase64(icon_b64))
+        self.setWindowIcon(GMakeIcon(GRes.app_icon_ico))
         self.init_signal()
         self.init_menu()
 
@@ -127,6 +122,7 @@ class MainWindow(QMainWindow):
         pass
 
     def on_view_about_qt(self):
+        Globals.app.aboutQt()
         pass
 
     @staticmethod
