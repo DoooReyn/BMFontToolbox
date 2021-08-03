@@ -1,8 +1,6 @@
 import os
 import sys
 
-import PySide6
-from PySide6.QtCore import QDir
 from PySide6.QtWidgets import QApplication
 
 from helper.common import Globals
@@ -11,10 +9,12 @@ from helper.path import get_user_picture, get_user_document
 from widgets.window import MainWindow
 
 
-dirname = os.path.dirname(PySide6.__file__)
-plugin_path = os.path.join(dirname, 'plugins', 'platforms')
-os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = plugin_path
-print(plugin_path)
+# import PySide6
+# dirname = os.path.dirname(PySide6.__file__)
+# plugin_path = os.path.join(dirname, 'plugins', 'platforms')
+# os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = plugin_path
+# print(plugin_path)
+
 
 def app_path():
     ret = None
@@ -24,6 +24,7 @@ def app_path():
         ret = os.path.dirname(sys.executable)
     ret = os.path.dirname(__file__)
     return os.path.abspath(ret)
+
 
 if __name__ == "__main__":
     Globals.app = QApplication([])
@@ -39,7 +40,8 @@ if __name__ == "__main__":
     Globals.config.init(Globals.UserData.window_height, 480)
     Globals.config.init(Globals.UserData.max_width_index, 1)
     Globals.main_window = MainWindow()
-    Globals.main_window.resize(Globals.config.get(Globals.UserData.window_width), Globals.config.get(Globals.UserData.window_height))
+    Globals.main_window.resize(Globals.config.get(Globals.UserData.window_width),
+                               Globals.config.get(Globals.UserData.window_height))
     Globals.main_window.show()
     Globals.main_window.open()
-    sys.exit(Globals.app.exec_())
+    sys.exit(Globals.app.exec())

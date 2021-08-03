@@ -12,6 +12,7 @@ from widgets.atlas_ui import AtlasUI
 from widgets.font_ui import FontUI
 from widgets.message import Message
 from widgets.setting_ui import SettingUI
+from widgets.about_dialog import AboutDialog
 from helper.resources import GRes, GMakeIcon
 
 
@@ -119,11 +120,10 @@ class MainWindow(QMainWindow):
         Message.show_info(Globals.help + tail, Globals.main_window)
 
     def on_view_about(self):
-        pass
+        AboutDialog().exec_()
 
     def on_view_about_qt(self):
         Globals.app.aboutQt()
-        pass
 
     @staticmethod
     def on_export():

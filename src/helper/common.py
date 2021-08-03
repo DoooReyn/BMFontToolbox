@@ -119,6 +119,21 @@ BMFont Toolbox 是一款基于Qt6和PySide6的图片字生成工具。主要功�
     # 全局新号存点
     signal = GSignal()
 
+    # app名称
+    app_name = "BMFontToolbox"
+
+    # 版本号
+    version = "v1.0.0.3"
+
+    # 作者
+    author = "DoooReyn"
+
+    # 仓库
+    repo = "https://github.com/DoooReyn/BMFontToolbox/tree/master"
+
+    # 技术
+    tech = "· Python3+\n· PySide6\n· Pillow\n· fonttool\n· getfontname"
+
     @staticmethod
     def get_max_width():
         """获取最大宽度值"""
